@@ -58,16 +58,16 @@ public class MapGen : MonoBehaviour
 
         Texture2D texture = new Texture2D(mapWidth, mapHeight);
 
-        Color[] colourMap = new Color[mapWidth * mapHeight];
+        Color[] colorMap = new Color[mapWidth * mapHeight];
         for (int y = 0; y < mapHeight; y++)
         {
             for (int x = 0; x < mapWidth; x++)
             {
-                colourMap[y * mapWidth + x] =
+                colorMap[y * mapWidth + x] =
                     Color.Lerp(Color.black, Color.white, noiseMap[mapWidth - x - 1, mapHeight - y - 1]);
             }
         }
-        texture.SetPixels(colourMap);
+        texture.SetPixels(colorMap);
         texture.Apply();
 
         noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
