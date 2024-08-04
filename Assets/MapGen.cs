@@ -9,6 +9,7 @@ public class MapGen : MonoBehaviour
     public float offsetX = 0;
     public float offsetY = 0;
 
+    public bool autoUpdateInEditor = false;
     public Material noisePlaneMaterial;
 
     private MeshFilter meshFilter;
@@ -43,8 +44,9 @@ public class MapGen : MonoBehaviour
         update = true;
     }
 
-    void GenerateMap()
+    public void GenerateMap()
     {
+        if (noisePlane == null) Start();
         float[,] heightMap = generatePerlinNoiseMap(size, offsetX, offsetY, scale);
         GenerateNoiseTexture(heightMap);
     }
@@ -68,8 +70,8 @@ public class MapGen : MonoBehaviour
         texture.SetPixels(colourMap);
         texture.Apply();
 
-        noisePlane.GetComponent<Renderer>().material = noisePlaneMaterial;
-        noisePlane.GetComponent<Renderer>().material.mainTexture = texture;
+        noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
+        noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
         noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
         noisePlane.transform.position = gameObject.transform.position;
     }

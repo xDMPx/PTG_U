@@ -474,6 +474,7 @@ MonoBehaviour:
   scale: 110.3
   offsetX: 0
   offsetY: 0
+  autoUpdateInEditor: 1
   noisePlaneMaterial: {fileID: 2100000, guid: 82e61778d1b3a633aaf62ff878227cfa, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
