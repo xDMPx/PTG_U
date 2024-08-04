@@ -10,6 +10,7 @@ public class MapGen : MonoBehaviour
     public float offsetY = 0;
 
     public bool autoUpdateInEditor = false;
+    public bool applyEaseFunction = false;
     public Material noisePlaneMaterial;
 
     private MeshFilter meshFilter;
@@ -47,7 +48,7 @@ public class MapGen : MonoBehaviour
     public void GenerateMap()
     {
         if (noisePlane == null) Start();
-        float[,] heightMap = generatePerlinNoiseMap(size, offsetX, offsetY, scale);
+        float[,] heightMap = generatePerlinNoiseMap(size, offsetX, offsetY, scale, applyEaseFunction);
         GenerateNoiseTexture(heightMap);
     }
 
@@ -76,7 +77,7 @@ public class MapGen : MonoBehaviour
         noisePlane.transform.position = gameObject.transform.position;
     }
 
-    public static float[,] generatePerlinNoiseMap(uint size, float offsetX, float offsetY, float scale)
+    public static float[,] generatePerlinNoiseMap(uint size, float offsetX, float offsetY, float scale, bool applyEaseFunction)
     {
         float[,] heightMap = new float[size, size];
         for (float y = 0; y < size; y++)
@@ -86,10 +87,18 @@ public class MapGen : MonoBehaviour
                 float pnX = (offsetX + x) / scale;
                 float pnY = (offsetY + y) / scale;
                 heightMap[(int)x, (int)y] = Mathf.PerlinNoise(pnX, pnY);
+                if (applyEaseFunction)
+                    heightMap[(int)x, (int)y] = easeFunction(heightMap[(int)x, (int)y]);
             }
         }
 
         return heightMap;
+    }
+
+    //https://mrl.cs.nyu.edu/~perlin/noise/
+    static float easeFunction(float t)
+    {   // 6t^5 - 15t^4 + 10t^3
+        return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
 }
