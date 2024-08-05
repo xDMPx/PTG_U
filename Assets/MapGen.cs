@@ -16,7 +16,6 @@ public class MapGen : MonoBehaviour
     public AnimationCurve curve;
     public Material noisePlaneMaterial;
 
-    private MeshFilter meshFilter;
     private GameObject noisePlane;
     private bool update = false;
 
@@ -25,7 +24,6 @@ public class MapGen : MonoBehaviour
     {
         if (noisePlane == null)
             noisePlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        meshFilter = gameObject.GetComponent<MeshFilter>();
         GenerateMap();
     }
 
@@ -52,6 +50,7 @@ public class MapGen : MonoBehaviour
     {
         if (noisePlane == null) Start();
         float[,] heightMap = generatePerlinNoiseMap(size, offsetX, offsetY, scale, applyEaseFunction, applyCurve, curve);
+        gameObject.GetComponent<MeshFilter>().mesh = generateMeshfromNoiseMap(heightMap);
         GenerateNoiseTexture(heightMap);
     }
 
@@ -105,6 +104,42 @@ public class MapGen : MonoBehaviour
     static float easeFunction(float t)
     {   // 6t^5 - 15t^4 + 10t^3
         return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+
+    public static Mesh generateMeshfromNoiseMap(float[,] noiseMap)
+    {
+        Mesh mesh = new Mesh();
+        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+        int width = noiseMap.GetLength(0);
+        int height = noiseMap.GetLength(1);
+
+        Vector3[] vertices = new Vector3[width * height];
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+                vertices[y * width + x] = new Vector3(x, noiseMap[x, y] * 1, y);
+
+        mesh.vertices = vertices;
+
+        int triangles_num = ((width * height) - (width + height - 1)) * 2;
+        int[] triangles = new int[triangles_num * 3];
+
+        for (int i = 0, triangle = 0; i < vertices.Length - width; i++)
+        {
+            if (i % width == width - 1)
+                continue;
+            triangles[triangle] = i;
+            triangles[triangle + 1] = i + width + 1;
+            triangles[triangle + 2] = i + 1;
+            triangles[triangle + 3] = i;
+            triangles[triangle + 4] = i + width;
+            triangles[triangle + 5] = i + width + 1;
+            triangle += 6;
+        }
+
+        mesh.triangles = triangles;
+        mesh.RecalculateNormals();
+
+        return mesh;
     }
 
 }
