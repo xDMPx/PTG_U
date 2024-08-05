@@ -6,8 +6,10 @@ public class MapGen : MonoBehaviour
 {
     public uint size = 500;
     public float scale = 110.3f;
+    public float meshHight = 100f;
     public float offsetX = 0;
     public float offsetY = 0;
+
 
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
@@ -50,7 +52,7 @@ public class MapGen : MonoBehaviour
     {
         if (noisePlane == null) Start();
         float[,] heightMap = generatePerlinNoiseMap(size, offsetX, offsetY, scale, applyEaseFunction, applyCurve, curve);
-        gameObject.GetComponent<MeshFilter>().mesh = generateMeshfromNoiseMap(heightMap);
+        gameObject.GetComponent<MeshFilter>().mesh = generateMeshfromNoiseMap(heightMap, meshHight);
         GenerateNoiseTexture(heightMap);
     }
 
@@ -106,7 +108,7 @@ public class MapGen : MonoBehaviour
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
-    public static Mesh generateMeshfromNoiseMap(float[,] noiseMap)
+    public static Mesh generateMeshfromNoiseMap(float[,] noiseMap, float meshHight)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
@@ -116,7 +118,7 @@ public class MapGen : MonoBehaviour
         Vector3[] vertices = new Vector3[width * height];
         for (int y = 0; y < height; y++)
             for (int x = 0; x < width; x++)
-                vertices[y * width + x] = new Vector3(x - width / 2, noiseMap[x, y] * 1, y - height / 2);
+                vertices[y * width + x] = new Vector3(x - width / 2, noiseMap[x, y] * meshHight, y - height / 2);
 
         mesh.vertices = vertices;
 

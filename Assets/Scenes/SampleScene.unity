@@ -474,6 +474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 500
   scale: 110.3
+  meshHight: 100
   offsetX: 0
   offsetY: 0
   autoUpdateInEditor: 1
