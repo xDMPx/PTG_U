@@ -11,6 +11,9 @@ public class MapGen : MonoBehaviour
 
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
+    public bool applyCurve = false;
+
+    public AnimationCurve curve;
     public Material noisePlaneMaterial;
 
     private MeshFilter meshFilter;
@@ -48,7 +51,7 @@ public class MapGen : MonoBehaviour
     public void GenerateMap()
     {
         if (noisePlane == null) Start();
-        float[,] heightMap = generatePerlinNoiseMap(size, offsetX, offsetY, scale, applyEaseFunction);
+        float[,] heightMap = generatePerlinNoiseMap(size, offsetX, offsetY, scale, applyEaseFunction, applyCurve, curve);
         GenerateNoiseTexture(heightMap);
     }
 
@@ -77,7 +80,7 @@ public class MapGen : MonoBehaviour
         noisePlane.transform.position = gameObject.transform.position;
     }
 
-    public static float[,] generatePerlinNoiseMap(uint size, float offsetX, float offsetY, float scale, bool applyEaseFunction)
+    public static float[,] generatePerlinNoiseMap(uint size, float offsetX, float offsetY, float scale, bool applyEaseFunction, bool applyCurve, AnimationCurve curve)
     {
         float[,] heightMap = new float[size, size];
         for (float y = 0; y < size; y++)
@@ -89,6 +92,9 @@ public class MapGen : MonoBehaviour
                 heightMap[(int)x, (int)y] = Mathf.PerlinNoise(pnX, pnY);
                 if (applyEaseFunction)
                     heightMap[(int)x, (int)y] = easeFunction(heightMap[(int)x, (int)y]);
+                if (applyCurve)
+                    heightMap[(int)x, (int)y] = curve.Evaluate(heightMap[(int)x, (int)y]);
+
             }
         }
 
