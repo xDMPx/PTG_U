@@ -116,7 +116,7 @@ public class MapGen : MonoBehaviour
         Vector3[] vertices = new Vector3[width * height];
         for (int y = 0; y < height; y++)
             for (int x = 0; x < width; x++)
-                vertices[y * width + x] = new Vector3(x, noiseMap[x, y] * 1, y);
+                vertices[y * width + x] = new Vector3(x - width / 2, noiseMap[x, y] * 1, y - height / 2);
 
         mesh.vertices = vertices;
 
