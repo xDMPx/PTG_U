@@ -141,6 +141,12 @@ public class MapGen : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
 
+        Vector2[] uvs = new Vector2[vertices.Length];
+        for (int i = vertices.Length - 1; i >= 0; i--)
+            uvs[vertices.Length - 1 - i] = new Vector2((vertices[i].x + width / 2) / width, (vertices[i].z + height / 2) / height);
+
+        mesh.uv = uvs;
+
         return mesh;
     }
 
