@@ -14,6 +14,7 @@ public class MapGen : MonoBehaviour
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
     public bool applyCurve = false;
+    public Color[] colors = new Color[4] { Color.blue, Color.yellow, Color.green, Color.gray };
 
     public AnimationCurve curve;
     public Material noisePlaneMaterial;
@@ -75,8 +76,13 @@ public class MapGen : MonoBehaviour
         texture.SetPixels(colorMap);
         texture.Apply();
 
+        Texture2D colorTexture = new Texture2D(1, 4);
+        colorTexture.SetPixels(colors);
+        colorTexture.Apply();
+
         noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
         noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
+        noisePlane.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", colorTexture);
         noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
         noisePlane.transform.position = gameObject.transform.position;
     }

@@ -480,6 +480,11 @@ MonoBehaviour:
   autoUpdateInEditor: 1
   applyEaseFunction: 0
   applyCurve: 0
+  colors:
+  - {r: 0, g: 0.3529412, b: 1, a: 1}
+  - {r: 0.93333334, g: 0.5411765, b: 0, a: 1}
+  - {r: 0.20784314, g: 0.93333334, b: 0, a: 1}
+  - {r: 0.30588236, g: 0.30980393, b: 0.30588236, a: 1}
   curve:
     serializedVersion: 2
     m_Curve: []
@@ -507,7 +512,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6dc77fefb8c454252853cd5b197219eb, type: 2}
+  - {fileID: 2100000, guid: 82e61778d1b3a633aaf62ff878227cfa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

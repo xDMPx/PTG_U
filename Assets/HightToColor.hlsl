@@ -2,19 +2,23 @@
 #ifndef HIGHT_TO_COLOR_INCLUDED
 #define HIGHT_TO_COLOR_INCLUDED
 
-void HightToColor_float(float4 color, float4 c1, float4 c2, float4 c3, float4 c4, out float4 Out)
+void HightToColor_float(float4 color, UnityTexture2D colorMap, out float4 Out)
 {
     float luminance = (color.r + color.g + color.b) / 3.0; 
     luminance = saturate(luminance);
 
+
+    //texelSize.w - height
+    //texelSize.z - width 
+
     if (luminance < 0.1){
-        Out = c1;
+        Out = colorMap.Load(int3(0,0,0));
     } else if (luminance < 0.2){
-        Out = c2;
+        Out = colorMap.Load(int3(0,1,0));
     } else if (luminance < 0.5){
-        Out = c3;
+        Out = colorMap.Load(int3(0,2,0));
     } else {
-        Out = c4;
+        Out = colorMap.Load(int3(0,3,0));
     }
 
 }
