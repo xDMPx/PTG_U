@@ -76,15 +76,17 @@ public class MapGen : MonoBehaviour
         texture.SetPixels(colorMap);
         texture.Apply();
 
+        noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
+        noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
+        noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
+        noisePlane.transform.position = gameObject.transform.position;
+
         Texture2D colorTexture = new Texture2D(1, 4);
         colorTexture.SetPixels(colors);
         colorTexture.Apply();
 
-        noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
-        noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
-        noisePlane.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", colorTexture);
-        noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
-        noisePlane.transform.position = gameObject.transform.position;
+        gameObject.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
+        gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", colorTexture);
     }
 
     public static float[,] generatePerlinNoiseMap(uint size, float offsetX, float offsetY, float scale, bool applyEaseFunction, bool applyCurve, AnimationCurve curve)
