@@ -345,7 +345,7 @@
     "m_Group": {
         "m_Id": ""
     },
-    "m_Name": "HightToColor (Custom Function)",
+    "m_Name": "NoiseValToColor (Custom Function)",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -361,7 +361,7 @@
             "m_Id": "38e2e392cb984e148f92c7b337dc1111"
         },
         {
-            "m_Id": "4ac405a5164f4bb1a57a68d62cd6965a"
+            "m_Id": "fb0d9fe0b26047598289ee7f1294f95a"
         },
         {
             "m_Id": "1707bdc31977460fa2a6b6dce94d7dd5"
@@ -379,8 +379,8 @@
         "m_SerializableColors": []
     },
     "m_SourceType": 0,
-    "m_FunctionName": "HightToColor",
-    "m_FunctionSource": "f5140e0943a5d79f2bb1483d7e38a040",
+    "m_FunctionName": "NoiseValToColor",
+    "m_FunctionSource": "ec6890b556e2a52eba6cb68c9c790063",
     "m_FunctionBody": "Out = Color;"
 }
 
@@ -597,24 +597,6 @@
     },
     "m_Labels": [],
     "m_Space": 0
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Texture2DInputMaterialSlot",
-    "m_ObjectId": "4ac405a5164f4bb1a57a68d62cd6965a",
-    "m_Id": 6,
-    "m_DisplayName": "New",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "New",
-    "m_StageCapability": 3,
-    "m_BareResource": false,
-    "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
-        "m_Guid": ""
-    },
-    "m_DefaultType": 0
 }
 
 {
@@ -1170,6 +1152,24 @@
     "m_ShaderOutputName": "Sampler",
     "m_StageCapability": 3,
     "m_BareResource": false
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Texture2DInputMaterialSlot",
+    "m_ObjectId": "fb0d9fe0b26047598289ee7f1294f95a",
+    "m_Id": 6,
+    "m_DisplayName": "ColorMap",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "ColorMap",
+    "m_StageCapability": 3,
+    "m_BareResource": false,
+    "m_Texture": {
+        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_Guid": ""
+    },
+    "m_DefaultType": 0
 }
 
 {

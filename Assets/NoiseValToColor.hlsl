@@ -1,8 +1,8 @@
 //UNITY_SHADER_NO_UPGRADE
-#ifndef HIGHT_TO_COLOR_INCLUDED
-#define HIGHT_TO_COLOR_INCLUDED
+#ifndef NOISE_VAL_TO_COLOR_INCLUDED
+#define NOISE_VAL_TO_COLOR_INCLUDED
 
-void HightToColor_float(float4 color, UnityTexture2D colorMap, out float4 Out)
+void NoiseValToColor_float(float4 color, UnityTexture2D colorMap, out float4 Out)
 {
     float luminance = (color.r + color.g + color.b) / 3.0; 
     luminance = saturate(luminance);
@@ -23,4 +23,4 @@ void HightToColor_float(float4 color, UnityTexture2D colorMap, out float4 Out)
 
 }
 
-#endif //HIGHT_TO_COLOR_INCLUDED
+#endif //NOISE_VAL_TO_COLOR_INCLUDED
