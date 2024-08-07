@@ -87,6 +87,7 @@ public class MapGen : MonoBehaviour
 
         gameObject.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
         gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", colorTexture);
+        gameObject.GetComponent<Renderer>().sharedMaterial.SetFloat("_meshHeight", meshHight);
     }
 
     public static float[,] generatePerlinNoiseMap(uint size, float offsetX, float offsetY, float scale, bool applyEaseFunction, bool applyCurve, AnimationCurve curve)
