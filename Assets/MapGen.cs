@@ -62,7 +62,7 @@ public class MapGen : MonoBehaviour
         int mapWidth = noiseMap.GetLength(0);
         int mapHeight = noiseMap.GetLength(1);
 
-        Texture2D texture = new Texture2D(mapWidth, mapHeight);
+        Texture2D texture = new Texture2D(mapWidth, mapHeight, TextureFormat.RGBA32, -1, true);
 
         Color[] colorMap = new Color[mapWidth * mapHeight];
         for (int y = 0; y < mapHeight; y++)
