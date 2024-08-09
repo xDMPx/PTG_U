@@ -5,6 +5,20 @@ using UnityEngine;
 
 public class MapGen : MonoBehaviour
 {
+
+    [Serializable]
+    public struct ColorThreshold
+    {
+        public Color color;
+        public float threshold;
+
+        public ColorThreshold(Color color, float threshold)
+        {
+            this.color = color;
+            this.threshold = threshold;
+        }
+    }
+
     public uint size = 500;
     public float scale = 110.3f;
     public float meshHight = 100f;
@@ -16,9 +30,12 @@ public class MapGen : MonoBehaviour
     public bool applyEaseFunction = false;
     public bool applyCurve = false;
 
-    public int colors_count = 4;
-    public Color[] colors = new Color[4] { Color.blue, Color.yellow, Color.green, Color.gray };
-    public float[] colors_limits = new float[4] { 0.1f, 0.2f, 0.5f, 1.0f };
+    public ColorThreshold[] colors = new ColorThreshold[4] {
+        new ColorThreshold(Color.blue, 0.1f),
+        new ColorThreshold(Color.yellow, 0.2f),
+        new ColorThreshold(Color.green, 0.5f),
+        new ColorThreshold(Color.gray, 1.0f)
+    };
 
     public AnimationCurve curve;
     public Material noisePlaneMaterial;
@@ -50,11 +67,9 @@ public class MapGen : MonoBehaviour
         if (scale < 0.1f) scale = 0.1f;
         if (offsetX < 0) offsetX = 0;
         if (offsetY < 0) offsetY = 0;
-        if (colors_count < 1) colors_count = 1;
-        if (colors.Length != colors_count || colors_limits.Length != colors_count)
+        if (colors.Length < 1)
         {
-            Array.Resize(ref colors, colors_count);
-            Array.Resize(ref colors_limits, colors_count);
+            Array.Resize(ref colors, 1);
         }
         update = true;
     }
@@ -91,16 +106,16 @@ public class MapGen : MonoBehaviour
         noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
         noisePlane.transform.position = gameObject.transform.position;
 
-        Texture2D colorTexture = new Texture2D(colors_count, 2, TextureFormat.RGBA32, -1, true);
-        Color[] color_data = new Color[2 * colors_count];
+        Texture2D colorTexture = new Texture2D(colors.Length, 2, TextureFormat.RGBA32, -1, true);
+        Color[] color_data = new Color[2 * colors.Length];
         int i = 0;
-        for (; i < colors_count; i++)
+        for (; i < colors.Length; i++)
         {
-            color_data[i] = colors[i];
+            color_data[i] = colors[i].color;
         }
-        for (; i < 2 * colors_count; i++)
+        for (; i < 2 * colors.Length; i++)
         {
-            color_data[i] = new Color(colors_limits[i - colors_count], colors_limits[i - colors_count], colors_limits[i - colors_count], 0);
+            color_data[i] = new Color(colors[i - colors.Length].threshold, colors[i - colors.Length].threshold, colors[i - colors.Length].threshold, 0);
         }
         colorTexture.SetPixels(color_data);
         colorTexture.Apply();
