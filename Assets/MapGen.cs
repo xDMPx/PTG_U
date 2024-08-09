@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,9 @@ public class MapGen : MonoBehaviour
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
     public bool applyCurve = false;
+    const int colors_count = 4;
     public Color[] colors = new Color[4] { Color.blue, Color.yellow, Color.green, Color.gray };
+    public float[] colors_limits = new float[4] { 0.1f, 0.2f, 0.5f, 1.0f };
 
     public AnimationCurve curve;
     public Material noisePlaneMaterial;
@@ -46,6 +49,11 @@ public class MapGen : MonoBehaviour
         if (scale < 0.1f) scale = 0.1f;
         if (offsetX < 0) offsetX = 0;
         if (offsetY < 0) offsetY = 0;
+        if (colors.Length != colors_count || colors_limits.Length != colors_count)
+        {
+            Array.Resize(ref colors, colors_count);
+            Array.Resize(ref colors_limits, colors_count);
+        }
         update = true;
     }
 
@@ -81,8 +89,18 @@ public class MapGen : MonoBehaviour
         noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
         noisePlane.transform.position = gameObject.transform.position;
 
-        Texture2D colorTexture = new Texture2D(1, 4);
-        colorTexture.SetPixels(colors);
+        Texture2D colorTexture = new Texture2D(colors_count, 2, TextureFormat.RGBA32, -1, true);
+        Color[] color_data = new Color[2 * colors_count];
+        int i = 0;
+        for (; i < colors_count; i++)
+        {
+            color_data[i] = colors[i];
+        }
+        for (; i < 2 * colors_count; i++)
+        {
+            color_data[i] = new Color(colors_limits[i - colors_count], colors_limits[i - colors_count], colors_limits[i - colors_count], 0);
+        }
+        colorTexture.SetPixels(color_data);
         colorTexture.Apply();
 
         gameObject.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;

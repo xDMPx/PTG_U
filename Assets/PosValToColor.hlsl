@@ -13,14 +13,14 @@ void PosValToColor_float(float3 position, UnityTexture2D colorMap, float height,
     //texelSize.w - height
     //texelSize.z - width 
 
-    if (luminance < 0.1){
+    if (luminance < colorMap.Load(int3(0,1,0)).x){
         Out = colorMap.Load(int3(0,0,0));
-    } else if (luminance < 0.2){
-        Out = colorMap.Load(int3(0,1,0));
-    } else if (luminance < 0.5){
-        Out = colorMap.Load(int3(0,2,0));
-    } else {
-        Out = colorMap.Load(int3(0,3,0));
+    } else if (luminance < colorMap.Load(int3(1,1,0)).x){
+        Out = colorMap.Load(int3(1,0,0));
+    } else if (luminance < colorMap.Load(int3(2,1,0)).x){
+        Out = colorMap.Load(int3(2,0,0));
+    } else if (luminance < colorMap.Load(int3(3,1,0)).x){
+        Out = colorMap.Load(int3(3,0,0));
     }
 
 }
