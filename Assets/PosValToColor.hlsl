@@ -7,20 +7,18 @@ float inverseLerp(float A, float B, float T);
 void PosValToColor_float(float3 position, UnityTexture2D colorMap, float height, out float4 Out)
 {
     
-    float luminance = inverseLerp(0,height,position.y); 
+    float luminance = inverseLerp(0, height, position.y); 
     luminance = saturate(luminance);
 
     //texelSize.w - height
     //texelSize.z - width 
 
-    if (luminance < colorMap.Load(int3(0,1,0)).x){
-        Out = colorMap.Load(int3(0,0,0));
-    } else if (luminance < colorMap.Load(int3(1,1,0)).x){
-        Out = colorMap.Load(int3(1,0,0));
-    } else if (luminance < colorMap.Load(int3(2,1,0)).x){
-        Out = colorMap.Load(int3(2,0,0));
-    } else if (luminance < colorMap.Load(int3(3,1,0)).x){
-        Out = colorMap.Load(int3(3,0,0));
+    for (int i = 0; i < colorMap.texelSize.z; i++) {
+        float limit = colorMap.Load(int3(i, 1, 0)).x;
+        if (luminance < limit) {
+            Out = colorMap.Load(int3(i, 0, 0));
+            break;
+        }
     }
 
 }

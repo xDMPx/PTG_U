@@ -11,14 +11,12 @@ void NoiseValToColor_float(float4 color, UnityTexture2D colorMap, out float4 Out
     //texelSize.w - height
     //texelSize.z - width 
 
-    if (luminance < colorMap.Load(int3(0,1,0)).x){
-        Out = colorMap.Load(int3(0,0,0));
-    } else if (luminance < colorMap.Load(int3(1,1,0)).x){
-        Out = colorMap.Load(int3(1,0,0));
-    } else if (luminance < colorMap.Load(int3(2,1,0)).x){
-        Out = colorMap.Load(int3(2,0,0));
-    } else if (luminance < colorMap.Load(int3(3,1,0)).x){
-        Out = colorMap.Load(int3(3,0,0));
+    for (int i = 0; i < colorMap.texelSize.z; i++) {
+        float limit = colorMap.Load(int3(i, 1, 0)).x;
+        if (luminance < limit) {
+            Out = colorMap.Load(int3(i, 0, 0));
+            break;
+        }
     }
 
 }

@@ -15,7 +15,8 @@ public class MapGen : MonoBehaviour
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
     public bool applyCurve = false;
-    const int colors_count = 4;
+
+    public int colors_count = 4;
     public Color[] colors = new Color[4] { Color.blue, Color.yellow, Color.green, Color.gray };
     public float[] colors_limits = new float[4] { 0.1f, 0.2f, 0.5f, 1.0f };
 
@@ -49,6 +50,7 @@ public class MapGen : MonoBehaviour
         if (scale < 0.1f) scale = 0.1f;
         if (offsetX < 0) offsetX = 0;
         if (offsetY < 0) offsetY = 0;
+        if (colors_count < 1) colors_count = 1;
         if (colors.Length != colors_count || colors_limits.Length != colors_count)
         {
             Array.Resize(ref colors, colors_count);
