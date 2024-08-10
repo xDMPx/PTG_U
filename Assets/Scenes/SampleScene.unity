@@ -472,17 +472,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596883aa583cd87d390b92925da82d94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 500
-  scale: 110.3
-  meshHight: 100
-  offsetX: 0
-  offsetY: 0
+  noiseMapConfig:
+    size: 500
+    scale: 110.3
+    offsetX: 0
+    offsetY: 0
   fBmParams:
     amplitude: 1
     frequency: 1
     persistence: 0.5
     lacunarity: 2
     octaveCount: 6
+  meshHight: 100
   autoUpdateInEditor: 1
   applyEaseFunction: 0
   applyCurve: 0

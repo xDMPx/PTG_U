@@ -43,14 +43,28 @@ public class MapGen : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public struct NoiseMapConfig
+    {
+        public uint size;
+        public float scale;
+        public float offsetX;
+        public float offsetY;
 
-    public uint size = 500;
-    public float scale = 110.3f;
-    public float meshHight = 100f;
-    public float offsetX = 0;
-    public float offsetY = 0;
+        public NoiseMapConfig(uint size, float scale, float offsetX, float offsetY)
+        {
+            this.size = size;
+            this.scale = scale;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
 
+        }
+    }
+
+    public NoiseMapConfig noiseMapConfig = new NoiseMapConfig(500, 110.3f, 0, 0);
     public FBmParams fBmParams = new FBmParams(1, 1, 0.5f, 2.0f, 6);
+
+    public float meshHight = 100f;
 
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
@@ -89,10 +103,11 @@ public class MapGen : MonoBehaviour
 
     void OnValidate()
     {
-        if (size < 10) size = 10;
-        if (scale < 0.1f) scale = 0.1f;
-        if (offsetX < 0) offsetX = 0;
-        if (offsetY < 0) offsetY = 0;
+
+        if (noiseMapConfig.size < 10) noiseMapConfig.size = 10;
+        if (noiseMapConfig.scale < 0.1f) noiseMapConfig.scale = 0.1f;
+        if (noiseMapConfig.offsetX < 0) noiseMapConfig.offsetX = 0;
+        if (noiseMapConfig.offsetY < 0) noiseMapConfig.offsetY = 0;
         if (fBmParams.amplitude < 1) fBmParams.amplitude = 1;
         if (fBmParams.frequency < 1) fBmParams.frequency = 1;
         if (colors.Length < 1)
@@ -107,15 +122,11 @@ public class MapGen : MonoBehaviour
         if (noisePlane == null) Start();
 
         float[,] heightMap = generatePerlinNoiseMap(
-                size,
-                offsetX,
-                offsetY,
-                scale,
+                noiseMapConfig,
+                fBmParams,
                 applyEaseFunction,
                 applyCurve,
-                curve,
-                fBmParams
-                );
+                curve);
 
         gameObject.GetComponent<MeshFilter>().mesh = generateMeshfromNoiseMap(heightMap, meshHight);
         GenerateNoiseTexture(heightMap);
@@ -165,16 +176,18 @@ public class MapGen : MonoBehaviour
     }
 
     public static float[,] generatePerlinNoiseMap(
-            uint size,
-            float offsetX,
-            float offsetY,
-            float scale,
+            NoiseMapConfig noiseMapConfig,
+            FBmParams fBmParams,
             bool applyEaseFunction,
             bool applyCurve,
-            AnimationCurve curve,
-            FBmParams fBmParams
+            AnimationCurve curve
             )
     {
+        uint size = noiseMapConfig.size;
+        float scale = noiseMapConfig.scale;
+        float offsetX = noiseMapConfig.offsetX;
+        float offsetY = noiseMapConfig.offsetY;
+
         float[,] heightMap = new float[size, size];
         for (int y = 0; y < size; y++)
         {
