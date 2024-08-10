@@ -19,17 +19,38 @@ public class MapGen : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public struct FBmParams
+    {
+        public float amplitude;
+        public float frequency;
+        public float persistence;
+        public float lacunarity;
+        public uint octaveCount;
+
+        public FBmParams(
+                float amplitude,
+                float frequency,
+                float persistence,
+                float lacunarity,
+                uint octaveCount)
+        {
+            this.amplitude = amplitude;
+            this.frequency = frequency;
+            this.persistence = persistence;
+            this.lacunarity = lacunarity;
+            this.octaveCount = octaveCount;
+        }
+    }
+
+
     public uint size = 500;
     public float scale = 110.3f;
     public float meshHight = 100f;
     public float offsetX = 0;
     public float offsetY = 0;
 
-    public float amplitude = 1;
-    public float frequency = 1;
-    public float persistence = 0.5f;
-    public float lacunarity = 2.0f;
-    public uint octaveCount = 6;
+    public FBmParams fBmParams = new FBmParams(1, 1, 0.5f, 2.0f, 6);
 
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
@@ -72,8 +93,8 @@ public class MapGen : MonoBehaviour
         if (scale < 0.1f) scale = 0.1f;
         if (offsetX < 0) offsetX = 0;
         if (offsetY < 0) offsetY = 0;
-        if (amplitude < 1) amplitude = 1;
-        if (frequency < 1) frequency = 1;
+        if (fBmParams.amplitude < 1) fBmParams.amplitude = 1;
+        if (fBmParams.frequency < 1) fBmParams.frequency = 1;
         if (colors.Length < 1)
         {
             Array.Resize(ref colors, 1);
@@ -93,11 +114,7 @@ public class MapGen : MonoBehaviour
                 applyEaseFunction,
                 applyCurve,
                 curve,
-                amplitude,
-                frequency,
-                octaveCount,
-                persistence,
-                lacunarity
+                fBmParams
                 );
 
         gameObject.GetComponent<MeshFilter>().mesh = generateMeshfromNoiseMap(heightMap, meshHight);
@@ -155,11 +172,7 @@ public class MapGen : MonoBehaviour
             bool applyEaseFunction,
             bool applyCurve,
             AnimationCurve curve,
-            float amplitude,
-            float frequency,
-            float octaveCount,
-            float persistence,
-            float lacunarity
+            FBmParams fBmParams
             )
     {
         float[,] heightMap = new float[size, size];
@@ -169,8 +182,8 @@ public class MapGen : MonoBehaviour
             {
                 float pnX = (offsetX + (float)x) / scale;
                 float pnY = (offsetY + (float)y) / scale;
-                if (octaveCount > 1)
-                    heightMap[x, y] = calculateFBM(pnX, pnY, amplitude, frequency, octaveCount, persistence, lacunarity);
+                if (fBmParams.octaveCount > 1)
+                    heightMap[x, y] = calculateFBM(pnX, pnY, fBmParams);
                 else
                     heightMap[x, y] = Mathf.PerlinNoise(pnX, pnY);
                 if (applyEaseFunction)
@@ -184,19 +197,19 @@ public class MapGen : MonoBehaviour
         return heightMap;
     }
 
-    private static float calculateFBM(float x, float y, float amp, float freq, float octaveCount, float persistence, float lacunarity)
+    private static float calculateFBM(float x, float y, FBmParams fBmParams)
     {
         float total = 0.0f;
         float sumOfAmplitudes = 0.0f;
-        float amplitude = amp;
-        float frequency = freq;
+        float amplitude = fBmParams.amplitude;
+        float frequency = fBmParams.frequency;
 
-        for (int i = 0; i < octaveCount; i++)
+        for (int i = 0; i < fBmParams.octaveCount; i++)
         {
             total += amplitude * Mathf.PerlinNoise(x * frequency, y * frequency);
             sumOfAmplitudes += amplitude;
-            amplitude *= persistence;
-            frequency *= lacunarity;
+            amplitude *= fBmParams.persistence;
+            frequency *= fBmParams.lacunarity;
         }
         return total / sumOfAmplitudes;
     }

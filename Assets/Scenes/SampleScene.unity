@@ -477,6 +477,12 @@ MonoBehaviour:
   meshHight: 100
   offsetX: 0
   offsetY: 0
+  fBmParams:
+    amplitude: 1
+    frequency: 1
+    persistence: 0.5
+    lacunarity: 2
+    octaveCount: 6
   autoUpdateInEditor: 1
   applyEaseFunction: 0
   applyCurve: 0
