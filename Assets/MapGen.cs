@@ -5,17 +5,23 @@ using UnityEngine;
 
 public class MapGen : MonoBehaviour
 {
-
     [Serializable]
-    public struct ColorThreshold
+    public struct NoiseMapConfig
     {
-        public Color color;
-        public float threshold;
+        public uint size;
+        public float scale;
+        public bool offsetBySize;
+        public float offsetX;
+        public float offsetY;
 
-        public ColorThreshold(Color color, float threshold)
+        public NoiseMapConfig(uint size, float scale, bool offsetBySize, float offsetX, float offsetY)
         {
-            this.color = color;
-            this.threshold = threshold;
+            this.size = size;
+            this.scale = scale;
+            this.offsetBySize = offsetBySize;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
+
         }
     }
 
@@ -44,24 +50,19 @@ public class MapGen : MonoBehaviour
     }
 
     [Serializable]
-    public struct NoiseMapConfig
+    public struct ColorThreshold
     {
-        public uint size;
-        public float scale;
-        public float offsetX;
-        public float offsetY;
+        public Color color;
+        public float threshold;
 
-        public NoiseMapConfig(uint size, float scale, float offsetX, float offsetY)
+        public ColorThreshold(Color color, float threshold)
         {
-            this.size = size;
-            this.scale = scale;
-            this.offsetX = offsetX;
-            this.offsetY = offsetY;
-
+            this.color = color;
+            this.threshold = threshold;
         }
     }
 
-    public NoiseMapConfig noiseMapConfig = new NoiseMapConfig(500, 110.3f, 0, 0);
+    public NoiseMapConfig noiseMapConfig = new NoiseMapConfig(500, 110.3f, false, 0, 0);
     public FBmParams fBmParams = new FBmParams(1, 1, 0.5f, 2.0f, 6);
 
     public float meshHight = 100f;
@@ -187,6 +188,11 @@ public class MapGen : MonoBehaviour
         float scale = noiseMapConfig.scale;
         float offsetX = noiseMapConfig.offsetX;
         float offsetY = noiseMapConfig.offsetY;
+        if (noiseMapConfig.offsetBySize)
+        {
+            offsetX *= size;
+            offsetY *= size;
+        }
 
         float[,] heightMap = new float[size, size];
         for (int y = 0; y < size; y++)

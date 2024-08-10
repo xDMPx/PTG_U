@@ -475,6 +475,7 @@ MonoBehaviour:
   noiseMapConfig:
     size: 500
     scale: 110.3
+    offsetBySize: 0
     offsetX: 0
     offsetY: 0
   fBmParams:
