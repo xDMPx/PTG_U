@@ -25,6 +25,11 @@ public class MapGen : MonoBehaviour
     public float offsetX = 0;
     public float offsetY = 0;
 
+    public float amplitude = 1;
+    public float frequency = 1;
+    public float persistence = 0.5f;
+    public float lacunarity = 2.0f;
+    public uint octaveCount = 6;
 
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
@@ -67,6 +72,8 @@ public class MapGen : MonoBehaviour
         if (scale < 0.1f) scale = 0.1f;
         if (offsetX < 0) offsetX = 0;
         if (offsetY < 0) offsetY = 0;
+        if (amplitude < 1) amplitude = 1;
+        if (frequency < 1) frequency = 1;
         if (colors.Length < 1)
         {
             Array.Resize(ref colors, 1);
@@ -77,7 +84,22 @@ public class MapGen : MonoBehaviour
     public void GenerateMap()
     {
         if (noisePlane == null) Start();
-        float[,] heightMap = generatePerlinNoiseMap(size, offsetX, offsetY, scale, applyEaseFunction, applyCurve, curve);
+
+        float[,] heightMap = generatePerlinNoiseMap(
+                size,
+                offsetX,
+                offsetY,
+                scale,
+                applyEaseFunction,
+                applyCurve,
+                curve,
+                amplitude,
+                frequency,
+                octaveCount,
+                persistence,
+                lacunarity
+                );
+
         gameObject.GetComponent<MeshFilter>().mesh = generateMeshfromNoiseMap(heightMap, meshHight);
         GenerateNoiseTexture(heightMap);
     }
@@ -125,25 +147,58 @@ public class MapGen : MonoBehaviour
         gameObject.GetComponent<Renderer>().sharedMaterial.SetFloat("_meshHeight", meshHight);
     }
 
-    public static float[,] generatePerlinNoiseMap(uint size, float offsetX, float offsetY, float scale, bool applyEaseFunction, bool applyCurve, AnimationCurve curve)
+    public static float[,] generatePerlinNoiseMap(
+            uint size,
+            float offsetX,
+            float offsetY,
+            float scale,
+            bool applyEaseFunction,
+            bool applyCurve,
+            AnimationCurve curve,
+            float amplitude,
+            float frequency,
+            float octaveCount,
+            float persistence,
+            float lacunarity
+            )
     {
         float[,] heightMap = new float[size, size];
-        for (float y = 0; y < size; y++)
+        for (int y = 0; y < size; y++)
         {
-            for (float x = 0; x < size; x++)
+            for (int x = 0; x < size; x++)
             {
-                float pnX = (offsetX + x) / scale;
-                float pnY = (offsetY + y) / scale;
-                heightMap[(int)x, (int)y] = Mathf.PerlinNoise(pnX, pnY);
+                float pnX = (offsetX + (float)x) / scale;
+                float pnY = (offsetY + (float)y) / scale;
+                if (octaveCount > 1)
+                    heightMap[x, y] = calculateFBM(pnX, pnY, amplitude, frequency, octaveCount, persistence, lacunarity);
+                else
+                    heightMap[x, y] = Mathf.PerlinNoise(pnX, pnY);
                 if (applyEaseFunction)
-                    heightMap[(int)x, (int)y] = easeFunction(heightMap[(int)x, (int)y]);
+                    heightMap[x, y] = easeFunction(heightMap[x, y]);
                 if (applyCurve)
-                    heightMap[(int)x, (int)y] = curve.Evaluate(heightMap[(int)x, (int)y]);
+                    heightMap[x, y] = curve.Evaluate(heightMap[x, y]);
 
             }
         }
 
         return heightMap;
+    }
+
+    private static float calculateFBM(float x, float y, float amp, float freq, float octaveCount, float persistence, float lacunarity)
+    {
+        float total = 0.0f;
+        float sumOfAmplitudes = 0.0f;
+        float amplitude = amp;
+        float frequency = freq;
+
+        for (int i = 0; i < octaveCount; i++)
+        {
+            total += amplitude * Mathf.PerlinNoise(x * frequency, y * frequency);
+            sumOfAmplitudes += amplitude;
+            amplitude *= persistence;
+            frequency *= lacunarity;
+        }
+        return total / sumOfAmplitudes;
     }
 
     //https://mrl.cs.nyu.edu/~perlin/noise/
