@@ -66,6 +66,7 @@ public class MapGen : MonoBehaviour
     public FBmParams fBmParams = new FBmParams(1, 1, 0.5f, 2.0f, 6);
 
     public float meshHight = 100f;
+    public uint meshLOD = 0;
 
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
@@ -129,7 +130,7 @@ public class MapGen : MonoBehaviour
                 applyCurve,
                 curve);
 
-        gameObject.GetComponent<MeshFilter>().mesh = generateMeshfromNoiseMap(heightMap, meshHight);
+        gameObject.GetComponent<MeshFilter>().mesh = generateMeshfromNoiseMap(heightMap, meshHight, meshLOD);
         GenerateNoiseTexture(heightMap);
     }
 
@@ -239,19 +240,33 @@ public class MapGen : MonoBehaviour
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
-    public static Mesh generateMeshfromNoiseMap(float[,] noiseMap, float meshHight)
+    public static Mesh generateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
 
-        Vector3[] vertices = new Vector3[width * height];
-        for (int y = 0; y < height; y++)
-            for (int x = 0; x < width; x++)
-                vertices[y * width + x] = new Vector3(x - width / 2, noiseMap[x, y] * meshHight, y - height / 2);
+
+        uint meshIncrement = LOD <= 0 ? 1 : LOD * 2;
+        uint widthInc = (uint)width / meshIncrement;
+        uint heightInc = (uint)height / meshIncrement;
+
+        Vector3[] vertices = new Vector3[widthInc * heightInc];
+
+        for (int y = 0; y < widthInc; y++)
+        {
+            for (int x = 0; x < heightInc; x++)
+            {
+                vertices[y * widthInc + x] = new Vector3((x - widthInc / 2) * meshIncrement,
+                        noiseMap[x, y] * meshHight, (y - heightInc / 2) * meshIncrement);
+            }
+        }
 
         mesh.vertices = vertices;
+
+        width = (int)widthInc;
+        height = (int)heightInc;
 
         int triangles_num = ((width * height) - (width + height - 1)) * 2;
         int[] triangles = new int[triangles_num * 3];
@@ -272,6 +287,8 @@ public class MapGen : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
 
+        width = noiseMap.GetLength(0);
+        height = noiseMap.GetLength(1);
         Vector2[] uvs = new Vector2[vertices.Length];
         for (int i = vertices.Length - 1; i >= 0; i--)
             uvs[vertices.Length - 1 - i] = new Vector2((vertices[i].x + width / 2) / width, (vertices[i].z + height / 2) / height);

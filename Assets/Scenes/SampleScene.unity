@@ -485,6 +485,7 @@ MonoBehaviour:
     lacunarity: 2
     octaveCount: 6
   meshHight: 100
+  meshLOD: 0
   autoUpdateInEditor: 1
   applyEaseFunction: 0
   applyCurve: 0
