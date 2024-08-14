@@ -34,8 +34,9 @@ public static class NoiseBasedMesh
         {
             for (int x = 0; x < height; x++)
             {
-                vertices[y * width + x] = new Vector3((x - width / 2) * meshIncrement,
-                        noiseMap[x, y] * meshHight, (y - height / 2) * meshIncrement);
+                vertices[y * width + x].x = (x - width / 2) * meshIncrement;
+                vertices[y * width + x].y = noiseMap[x, y] * meshHight;
+                vertices[y * width + x].z = (y - height / 2) * meshIncrement;
             }
         }
 
@@ -67,7 +68,10 @@ public static class NoiseBasedMesh
     {
         Vector2[] uvs = new Vector2[vertices.Length];
         for (int i = vertices.Length - 1; i >= 0; i--)
-            uvs[vertices.Length - 1 - i] = new Vector2((vertices[i].x + width / 2) / width, (vertices[i].z + height / 2) / height);
+        {
+            uvs[vertices.Length - 1 - i].x = (vertices[i].x + width / 2) / width;
+            uvs[vertices.Length - 1 - i].y = (vertices[i].z + height / 2) / height;
+        }
 
         return uvs;
     }
