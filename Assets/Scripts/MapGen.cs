@@ -23,9 +23,11 @@ public class MapGen : MonoBehaviour
     };
 
     public AnimationCurve curve;
+    public bool showNoisePlane = true;
     public Material noisePlaneMaterial;
 
     private GameObject noisePlane;
+    private Texture2D noiseTexture;
     private bool update = false;
 
     public ColoringShader cshader = ColoringShader.TEXTURE;
@@ -68,23 +70,36 @@ public class MapGen : MonoBehaviour
 
     public void GenerateMap()
     {
-        if (noisePlane == null) Start();
+        if (noisePlane == null && showNoisePlane == true) Start();
+        if (noisePlane != null && showNoisePlane == false) DestroyImmediate(noisePlane);
 
-        float[,] heightMap = generatePerlinNoiseMap(
+        float[,] noiseMap = generatePerlinNoiseMap(
                 noiseMapConfig,
                 fBmParams,
                 applyEaseFunction,
                 applyCurve,
                 curve);
 
-        gameObject.GetComponent<MeshFilter>().mesh = NoiseBasedMesh.generateMeshfromNoiseMap(heightMap, meshHeight, meshLOD);
-        GenerateNoiseTexture(heightMap);
+        gameObject.GetComponent<MeshFilter>().mesh = NoiseBasedMesh.generateMeshfromNoiseMap(noiseMap, meshHeight, meshLOD);
 
+        if (cshader == ColoringShader.TEXTURE || showNoisePlane)
+        {
+            noiseTexture = GenerateNoiseTexture(noiseMap);
+            if (showNoisePlane)
+            {
+                noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
+                noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
+                int mapWidth = noiseMap.GetLength(0);
+                int mapHeight = noiseMap.GetLength(1);
+                noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
+                noisePlane.transform.position = gameObject.transform.position;
+            }
+        }
 
         if (cshader == ColoringShader.TEXTURE)
         {
             gameObject.GetComponent<Renderer>().sharedMaterial = textureShaderMaterial;
-            gameObject.GetComponent<Renderer>().sharedMaterial.mainTexture = noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture;
+            gameObject.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
             gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", generateColorMap());
         }
         else if (cshader == ColoringShader.HIGHT)
@@ -95,7 +110,7 @@ public class MapGen : MonoBehaviour
         }
     }
 
-    void GenerateNoiseTexture(float[,] noiseMap)
+    Texture2D GenerateNoiseTexture(float[,] noiseMap)
     {
         int mapWidth = noiseMap.GetLength(0);
         int mapHeight = noiseMap.GetLength(1);
@@ -114,10 +129,7 @@ public class MapGen : MonoBehaviour
         texture.SetPixels(colorMap);
         texture.Apply();
 
-        noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
-        noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = texture;
-        noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
-        noisePlane.transform.position = gameObject.transform.position;
+        return texture;
     }
 
     Texture2D generateColorMap()

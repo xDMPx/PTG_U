@@ -504,6 +504,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  showNoisePlane: 1
   noisePlaneMaterial: {fileID: 2100000, guid: 82e61778d1b3a633aaf62ff878227cfa, type: 2}
   cshader: 1
   textureShaderMaterial: {fileID: 2100000, guid: 6dc77fefb8c454252853cd5b197219eb,
