@@ -2,6 +2,13 @@ using System;
 using UnityEngine;
 
 [Serializable]
+public enum ColoringShader
+{
+    HIGHT,
+    TEXTURE,
+}
+
+[Serializable]
 public struct NoiseMapConfig
 {
     public uint size;

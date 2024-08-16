@@ -484,7 +484,7 @@ MonoBehaviour:
     persistence: 0.5
     lacunarity: 2
     octaveCount: 6
-  meshHight: 100
+  meshHeight: 100
   meshLOD: 0
   autoUpdateInEditor: 1
   applyEaseFunction: 0
@@ -505,6 +505,11 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   noisePlaneMaterial: {fileID: 2100000, guid: 82e61778d1b3a633aaf62ff878227cfa, type: 2}
+  cshader: 1
+  textureShaderMaterial: {fileID: 2100000, guid: 6dc77fefb8c454252853cd5b197219eb,
+    type: 2}
+  heightShaderMaterial: {fileID: 2100000, guid: 70f33ad4917259b1bb930df2a6fb8a80,
+    type: 2}
 --- !u!23 &1499420332
 MeshRenderer:
   m_ObjectHideFlags: 0
