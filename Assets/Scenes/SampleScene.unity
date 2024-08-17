@@ -479,6 +479,7 @@ MonoBehaviour:
     offsetBySize: 0
     offsetX: 0
     offsetY: 0
+    improvedNoiseZ: 1
   fBmParams:
     amplitude: 1
     frequency: 1

@@ -7,7 +7,7 @@ public class MapGen : MonoBehaviour
 {
 
     public NoiseSource noiseSource = NoiseSource.Unity;
-    public NoiseMapConfig noiseMapConfig = new NoiseMapConfig(500, 110.3f, false, 0, 0);
+    public NoiseMapConfig noiseMapConfig = new NoiseMapConfig(500, 110.3f, false, 0, 0, 1);
     public FBmParams fBmParams = new FBmParams(1, 1, 0.5f, 2.0f, 6);
 
     public float meshHeight = 100f;
@@ -168,6 +168,7 @@ public class MapGen : MonoBehaviour
         float scale = noiseMapConfig.scale;
         float offsetX = noiseMapConfig.offsetX;
         float offsetY = noiseMapConfig.offsetY;
+        float improvedNoiseZ = noiseMapConfig.improvedNoiseZ;
         if (noiseMapConfig.offsetBySize)
         {
             offsetX *= size;
@@ -182,9 +183,9 @@ public class MapGen : MonoBehaviour
                 float pnX = (offsetX + (float)x) / scale;
                 float pnY = (offsetY + (float)y) / scale;
                 if (fBmParams.octaveCount > 1)
-                    heightMap[x, y] = calculateFBM(pnX, pnY, noiseSource, fBmParams);
+                    heightMap[x, y] = calculateFBM(pnX, pnY, noiseSource, fBmParams, improvedNoiseZ);
                 else if (noiseSource == NoiseSource.ImprovedNoise)
-                    heightMap[x, y] = PerlinNoiseGenerator.NormalizedPerlinNoise(pnX, pnY);
+                    heightMap[x, y] = PerlinNoiseGenerator.NormalizedPerlinNoise(pnX, pnY, improvedNoiseZ);
                 else
                     heightMap[x, y] = Mathf.PerlinNoise(pnX, pnY);
                 if (applyEaseFunction)
@@ -198,7 +199,7 @@ public class MapGen : MonoBehaviour
         return heightMap;
     }
 
-    private static float calculateFBM(float x, float y, NoiseSource noiseSource, FBmParams fBmParams)
+    private static float calculateFBM(float x, float y, NoiseSource noiseSource, FBmParams fBmParams, float improvedNoiseZ = 1)
     {
         float total = 0.0f;
         float sumOfAmplitudes = 0.0f;
@@ -208,7 +209,7 @@ public class MapGen : MonoBehaviour
         for (int i = 0; i < fBmParams.octaveCount; i++)
         {
             if (noiseSource == NoiseSource.ImprovedNoise)
-                total += amplitude * PerlinNoiseGenerator.NormalizedPerlinNoise(x * frequency, y * frequency);
+                total += amplitude * PerlinNoiseGenerator.NormalizedPerlinNoise(x * frequency, y * frequency, improvedNoiseZ);
             else
                 total += amplitude * Mathf.PerlinNoise(x * frequency, y * frequency);
             sumOfAmplitudes += amplitude;

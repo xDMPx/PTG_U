@@ -23,15 +23,16 @@ public struct NoiseMapConfig
     public bool offsetBySize;
     public float offsetX;
     public float offsetY;
+    public float improvedNoiseZ;
 
-    public NoiseMapConfig(uint size, float scale, bool offsetBySize, float offsetX, float offsetY)
+    public NoiseMapConfig(uint size, float scale, bool offsetBySize, float offsetX, float offsetY, float improvedNoiseZ = 1)
     {
         this.size = size;
         this.scale = scale;
         this.offsetBySize = offsetBySize;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
-
+        this.improvedNoiseZ = improvedNoiseZ;
     }
 }
 

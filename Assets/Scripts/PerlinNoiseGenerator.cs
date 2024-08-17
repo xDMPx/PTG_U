@@ -30,9 +30,8 @@ public static class PerlinNoiseGenerator
 
     //https://mrl.cs.nyu.edu/~perlin/noise/
     // <-1,1>
-    static public float PerlinNoise(float x, float y)
+    static public float PerlinNoise(float x, float y, float z = 1)
     {
-        float z = 1;
         int X = (int)Mathf.Floor(x) & 255,                                  // FIND UNIT CUBE THAT
             Y = (int)Mathf.Floor(y) & 255,                                  // CONTAINS POINT.
             Z = (int)Mathf.Floor(z) & 255;
@@ -70,8 +69,8 @@ public static class PerlinNoiseGenerator
         return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
     }
 
-    static public float NormalizedPerlinNoise(float x, float y)
+    static public float NormalizedPerlinNoise(float x, float y, float z = 1)
     {
-        return Mathf.InverseLerp(-1, 1, PerlinNoise(x, y));
+        return Mathf.InverseLerp(-1, 1, PerlinNoise(x, y, z));
     }
 }
