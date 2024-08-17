@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MapGen : MonoBehaviour
 {
+
+    public NoiseSource noiseSource = NoiseSource.Unity;
     public NoiseMapConfig noiseMapConfig = new NoiseMapConfig(500, 110.3f, false, 0, 0);
     public FBmParams fBmParams = new FBmParams(1, 1, 0.5f, 2.0f, 6);
 
@@ -54,7 +56,6 @@ public class MapGen : MonoBehaviour
 
     void OnValidate()
     {
-
         if (noiseMapConfig.size < 10) noiseMapConfig.size = 10;
         if (noiseMapConfig.scale < 0.1f) noiseMapConfig.scale = 0.1f;
         if (noiseMapConfig.offsetX < 0) noiseMapConfig.offsetX = 0;
@@ -74,6 +75,7 @@ public class MapGen : MonoBehaviour
         if (noisePlane != null && showNoisePlane == false) DestroyImmediate(noisePlane);
 
         float[,] noiseMap = generatePerlinNoiseMap(
+                noiseSource,
                 noiseMapConfig,
                 fBmParams,
                 applyEaseFunction,
@@ -154,6 +156,7 @@ public class MapGen : MonoBehaviour
     }
 
     public static float[,] generatePerlinNoiseMap(
+            NoiseSource noiseSource,
             NoiseMapConfig noiseMapConfig,
             FBmParams fBmParams,
             bool applyEaseFunction,
@@ -179,9 +182,11 @@ public class MapGen : MonoBehaviour
                 float pnX = (offsetX + (float)x) / scale;
                 float pnY = (offsetY + (float)y) / scale;
                 if (fBmParams.octaveCount > 1)
-                    heightMap[x, y] = calculateFBM(pnX, pnY, fBmParams);
-                else
+                    heightMap[x, y] = calculateFBM(pnX, pnY, noiseSource, fBmParams);
+                else if (noiseSource == NoiseSource.ImprovedNoise)
                     heightMap[x, y] = PerlinNoiseGenerator.NormalizedPerlinNoise(pnX, pnY);
+                else
+                    heightMap[x, y] = Mathf.PerlinNoise(pnX, pnY);
                 if (applyEaseFunction)
                     heightMap[x, y] = easeFunction(heightMap[x, y]);
                 if (applyCurve)
@@ -193,7 +198,7 @@ public class MapGen : MonoBehaviour
         return heightMap;
     }
 
-    private static float calculateFBM(float x, float y, FBmParams fBmParams)
+    private static float calculateFBM(float x, float y, NoiseSource noiseSource, FBmParams fBmParams)
     {
         float total = 0.0f;
         float sumOfAmplitudes = 0.0f;
@@ -202,7 +207,10 @@ public class MapGen : MonoBehaviour
 
         for (int i = 0; i < fBmParams.octaveCount; i++)
         {
-            total += amplitude * PerlinNoiseGenerator.NormalizedPerlinNoise(x * frequency, y * frequency);
+            if (noiseSource == NoiseSource.ImprovedNoise)
+                total += amplitude * PerlinNoiseGenerator.NormalizedPerlinNoise(x * frequency, y * frequency);
+            else
+                total += amplitude * Mathf.PerlinNoise(x * frequency, y * frequency);
             sumOfAmplitudes += amplitude;
             amplitude *= fBmParams.persistence;
             frequency *= fBmParams.lacunarity;

@@ -2,6 +2,13 @@ using System;
 using UnityEngine;
 
 [Serializable]
+public enum NoiseSource
+{
+    Unity,
+    ImprovedNoise,
+}
+
+[Serializable]
 public enum ColoringShader
 {
     HIGHT,
