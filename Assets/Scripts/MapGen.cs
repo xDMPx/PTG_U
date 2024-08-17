@@ -181,7 +181,7 @@ public class MapGen : MonoBehaviour
                 if (fBmParams.octaveCount > 1)
                     heightMap[x, y] = calculateFBM(pnX, pnY, fBmParams);
                 else
-                    heightMap[x, y] = Mathf.PerlinNoise(pnX, pnY);
+                    heightMap[x, y] = PerlinNoiseGenerator.NormalizedPerlinNoise(pnX, pnY);
                 if (applyEaseFunction)
                     heightMap[x, y] = easeFunction(heightMap[x, y]);
                 if (applyCurve)
@@ -202,7 +202,7 @@ public class MapGen : MonoBehaviour
 
         for (int i = 0; i < fBmParams.octaveCount; i++)
         {
-            total += amplitude * Mathf.PerlinNoise(x * frequency, y * frequency);
+            total += amplitude * PerlinNoiseGenerator.NormalizedPerlinNoise(x * frequency, y * frequency);
             sumOfAmplitudes += amplitude;
             amplitude *= fBmParams.persistence;
             frequency *= fBmParams.lacunarity;
