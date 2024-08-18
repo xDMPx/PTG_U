@@ -9,5 +9,10 @@ public class MapGenEditor : Editor
         MapGen mapgen = (MapGen)target;
         if (DrawDefaultInspector() && mapgen.autoUpdateInEditor) mapgen.GenerateMap();
         if (GUILayout.Button("Generate")) mapgen.GenerateMap();
+        if (GUILayout.Button("Randomize Permutation Table"))
+        {
+            PerlinNoiseGenerator.RandomizePermutationTable();
+            mapgen.GenerateMap();
+        }
     }
 }
