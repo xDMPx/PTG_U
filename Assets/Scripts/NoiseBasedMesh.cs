@@ -3,27 +3,27 @@ using UnityEngine;
 public static class NoiseBasedMesh
 {
 
-    public static Mesh generateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0)
+    public static Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
         uint meshIncrement = LOD <= 0 ? 1 : LOD * 2;
-        Vector3[] vertices = meshVertices(noiseMap, meshHight, meshIncrement);
+        Vector3[] vertices = MeshVertices(noiseMap, meshHight, meshIncrement);
         mesh.vertices = vertices;
 
         int width = noiseMap.GetLength(0) / (int)meshIncrement;
         int height = noiseMap.GetLength(1) / (int)meshIncrement;
         int vertices_len = width * height;
 
-        mesh.triangles = meshTriangles(width, height, vertices_len);
-        mesh.uv = meshUVs(mesh.vertices, noiseMap.GetLength(0), noiseMap.GetLength(1));
+        mesh.triangles = MeshTriangles(width, height, vertices_len);
+        mesh.uv = MeshUVs(mesh.vertices, noiseMap.GetLength(0), noiseMap.GetLength(1));
         mesh.RecalculateNormals();
 
         return mesh;
     }
 
-    public static Vector3[] meshVertices(float[,] noiseMap, float meshHight, uint meshIncrement)
+    public static Vector3[] MeshVertices(float[,] noiseMap, float meshHight, uint meshIncrement)
     {
         uint width = (uint)noiseMap.GetLength(0) / meshIncrement;
         uint height = (uint)noiseMap.GetLength(1) / meshIncrement;
@@ -43,7 +43,7 @@ public static class NoiseBasedMesh
         return vertices;
     }
 
-    public static int[] meshTriangles(int width, int height, int vertices_len)
+    public static int[] MeshTriangles(int width, int height, int vertices_len)
     {
         int triangles_num = ((width * height) - (width + height - 1)) * 2;
         int[] triangles = new int[triangles_num * 3];
@@ -64,7 +64,7 @@ public static class NoiseBasedMesh
         return triangles;
     }
 
-    public static Vector2[] meshUVs(Vector3[] vertices, int width, int height)
+    public static Vector2[] MeshUVs(Vector3[] vertices, int width, int height)
     {
         Vector2[] uvs = new Vector2[vertices.Length];
         for (int i = vertices.Length - 1; i >= 0; i--)

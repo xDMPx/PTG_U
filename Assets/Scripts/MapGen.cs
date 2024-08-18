@@ -74,7 +74,7 @@ public class MapGen : MonoBehaviour
         if (noisePlane == null && showNoisePlane == true) Start();
         if (noisePlane != null && showNoisePlane == false) DestroyImmediate(noisePlane);
 
-        float[,] noiseMap = generatePerlinNoiseMap(
+        float[,] noiseMap = GeneratePerlinNoiseMap(
                 noiseSource,
                 noiseMapConfig,
                 fBmParams,
@@ -82,7 +82,7 @@ public class MapGen : MonoBehaviour
                 applyCurve,
                 curve);
 
-        gameObject.GetComponent<MeshFilter>().mesh = NoiseBasedMesh.generateMeshfromNoiseMap(noiseMap, meshHeight, meshLOD);
+        gameObject.GetComponent<MeshFilter>().mesh = NoiseBasedMesh.GenerateMeshfromNoiseMap(noiseMap, meshHeight, meshLOD);
 
         if (cshader == ColoringShader.TEXTURE || showNoisePlane)
         {
@@ -102,12 +102,12 @@ public class MapGen : MonoBehaviour
         {
             gameObject.GetComponent<Renderer>().sharedMaterial = textureShaderMaterial;
             gameObject.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
-            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", generateColorMap());
+            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", GenerateColorMap());
         }
         else if (cshader == ColoringShader.HIGHT)
         {
             gameObject.GetComponent<Renderer>().sharedMaterial = heightShaderMaterial;
-            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", generateColorMap());
+            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", GenerateColorMap());
             gameObject.GetComponent<Renderer>().sharedMaterial.SetFloat("_meshHeight", meshHeight);
         }
     }
@@ -134,7 +134,7 @@ public class MapGen : MonoBehaviour
         return texture;
     }
 
-    Texture2D generateColorMap()
+    Texture2D GenerateColorMap()
     {
         Texture2D colorTexture = new Texture2D(colors.Length, 2, TextureFormat.RGBA32, -1, true);
         Color[] color_data = new Color[2 * colors.Length];
@@ -155,7 +155,7 @@ public class MapGen : MonoBehaviour
         return colorTexture;
     }
 
-    public static float[,] generatePerlinNoiseMap(
+    public static float[,] GeneratePerlinNoiseMap(
             NoiseSource noiseSource,
             NoiseMapConfig noiseMapConfig,
             FBmParams fBmParams,
@@ -183,13 +183,13 @@ public class MapGen : MonoBehaviour
                 float pnX = (offsetX + (float)x) / scale;
                 float pnY = (offsetY + (float)y) / scale;
                 if (fBmParams.octaveCount > 1)
-                    heightMap[x, y] = calculateFBM(pnX, pnY, noiseSource, fBmParams, improvedNoiseZ);
+                    heightMap[x, y] = CalculateFBM(pnX, pnY, noiseSource, fBmParams, improvedNoiseZ);
                 else if (noiseSource == NoiseSource.ImprovedNoise)
                     heightMap[x, y] = PerlinNoiseGenerator.NormalizedPerlinNoise(pnX, pnY, improvedNoiseZ);
                 else
                     heightMap[x, y] = Mathf.PerlinNoise(pnX, pnY);
                 if (applyEaseFunction)
-                    heightMap[x, y] = easeFunction(heightMap[x, y]);
+                    heightMap[x, y] = EaseFunction(heightMap[x, y]);
                 if (applyCurve)
                     heightMap[x, y] = curve.Evaluate(heightMap[x, y]);
 
@@ -199,7 +199,7 @@ public class MapGen : MonoBehaviour
         return heightMap;
     }
 
-    private static float calculateFBM(float x, float y, NoiseSource noiseSource, FBmParams fBmParams, float improvedNoiseZ = 1)
+    private static float CalculateFBM(float x, float y, NoiseSource noiseSource, FBmParams fBmParams, float improvedNoiseZ = 1)
     {
         float total = 0.0f;
         float sumOfAmplitudes = 0.0f;
@@ -220,7 +220,7 @@ public class MapGen : MonoBehaviour
     }
 
     //https://mrl.cs.nyu.edu/~perlin/noise/
-    static float easeFunction(float t)
+    static float EaseFunction(float t)
     {   // 6t^5 - 15t^4 + 10t^3
         return t * t * t * (t * (t * 6 - 15) + 10);
     }

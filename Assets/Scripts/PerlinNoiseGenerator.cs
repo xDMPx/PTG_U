@@ -38,30 +38,30 @@ public static class PerlinNoiseGenerator
         x -= Mathf.Floor(x);                                                // FIND RELATIVE X,Y,Z
         y -= Mathf.Floor(y);                                                // OF POINT IN CUBE.
         z -= Mathf.Floor(z);
-        float u = fade(x),                                                  // COMPUTE FADE CURVES
-              v = fade(y),                                                  // FOR EACH OF X,Y,Z.
-              w = fade(z);
+        float u = Fade(x),                                                  // COMPUTE FADE CURVES
+              v = Fade(y),                                                  // FOR EACH OF X,Y,Z.
+              w = Fade(z);
         int A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z,                 // HASH COORDINATES OF
             B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z;             // THE 8 CUBE CORNERS,
 
-        return lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z),                // AND ADD
-                                       grad(p[BA], x - 1, y, z)),           // BLENDED
-                               lerp(u, grad(p[AB], x, y - 1, z),            // RESULTS
-                                       grad(p[BB], x - 1, y - 1, z))),      // FROM  8
-                       lerp(v, lerp(u, grad(p[AA + 1], x, y, z - 1),        // CORNERS
-                                       grad(p[BA + 1], x - 1, y, z - 1)),   // OF CUBE
-                               lerp(u, grad(p[AB + 1], x, y - 1, z - 1),
-                                       grad(p[BB + 1], x - 1, y - 1, z - 1))));
+        return Lerp(w, Lerp(v, Lerp(u, Grad(p[AA], x, y, z),                // AND ADD
+                                       Grad(p[BA], x - 1, y, z)),           // BLENDED
+                               Lerp(u, Grad(p[AB], x, y - 1, z),            // RESULTS
+                                       Grad(p[BB], x - 1, y - 1, z))),      // FROM  8
+                       Lerp(v, Lerp(u, Grad(p[AA + 1], x, y, z - 1),        // CORNERS
+                                       Grad(p[BA + 1], x - 1, y, z - 1)),   // OF CUBE
+                               Lerp(u, Grad(p[AB + 1], x, y - 1, z - 1),
+                                       Grad(p[BB + 1], x - 1, y - 1, z - 1))));
     }
 
     //https://mrl.cs.nyu.edu/~perlin/noise/
-    static float fade(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+    static float Fade(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
 
     //https://mrl.cs.nyu.edu/~perlin/noise/
-    static float lerp(float t, float a, float b) { return a + t * (b - a); }
+    static float Lerp(float t, float a, float b) { return a + t * (b - a); }
 
     //https://mrl.cs.nyu.edu/~perlin/noise/
-    static float grad(int hash, float x, float y, float z)
+    static float Grad(int hash, float x, float y, float z)
     {
         int h = hash & 15;                                      // CONVERT LO 4 BITS OF HASH CODE
         float u = h < 8 ? x : y,                                // INTO 12 GRADIENT DIRECTIONS.
