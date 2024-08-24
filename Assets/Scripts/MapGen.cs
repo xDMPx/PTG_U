@@ -102,17 +102,17 @@ public class MapGen : MonoBehaviour
         {
             gameObject.GetComponent<Renderer>().sharedMaterial = textureShaderMaterial;
             gameObject.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
-            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", GenerateColorMap());
+            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", GenerateColorMap(colors));
         }
         else if (cshader == ColoringShader.HIGHT)
         {
             gameObject.GetComponent<Renderer>().sharedMaterial = heightShaderMaterial;
-            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", GenerateColorMap());
+            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", GenerateColorMap(colors));
             gameObject.GetComponent<Renderer>().sharedMaterial.SetFloat("_meshHeight", meshHeight);
         }
     }
 
-    Texture2D GenerateNoiseTexture(float[,] noiseMap)
+    static Texture2D GenerateNoiseTexture(float[,] noiseMap)
     {
         int mapWidth = noiseMap.GetLength(0);
         int mapHeight = noiseMap.GetLength(1);
@@ -134,7 +134,7 @@ public class MapGen : MonoBehaviour
         return texture;
     }
 
-    Texture2D GenerateColorMap()
+    static Texture2D GenerateColorMap(ColorThreshold[] colors)
     {
         Texture2D colorTexture = new Texture2D(colors.Length, 2, TextureFormat.RGBA32, -1, true);
         Color[] color_data = new Color[2 * colors.Length];
