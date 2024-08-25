@@ -89,8 +89,16 @@ public class MapGen : MonoBehaviour
             noiseTexture = NoiseMapUtilities.GenerateNoiseTexture(noiseMap);
             if (showNoisePlane)
             {
-                noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
-                noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
+                if (!Application.isPlaying)
+                {
+                    noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
+                    noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
+                }
+                else
+                {
+                    noisePlane.GetComponent<Renderer>().material = noisePlaneMaterial;
+                    noisePlane.GetComponent<Renderer>().material.mainTexture = noiseTexture;
+                }
                 int mapWidth = noiseMap.GetLength(0);
                 int mapHeight = noiseMap.GetLength(1);
                 noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
@@ -100,15 +108,33 @@ public class MapGen : MonoBehaviour
 
         if (cshader == ColoringShader.TEXTURE)
         {
-            gameObject.GetComponent<Renderer>().sharedMaterial = textureShaderMaterial;
-            gameObject.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
-            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", NoiseMapUtilities.GenerateColorMap(colors));
+            if (!Application.isPlaying)
+            {
+                gameObject.GetComponent<Renderer>().sharedMaterial = textureShaderMaterial;
+                gameObject.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
+                gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", NoiseMapUtilities.GenerateColorMap(colors));
+            }
+            else
+            {
+                gameObject.GetComponent<Renderer>().material = textureShaderMaterial;
+                gameObject.GetComponent<Renderer>().material.mainTexture = noiseTexture;
+                gameObject.GetComponent<Renderer>().material.SetTexture("_colorMap", NoiseMapUtilities.GenerateColorMap(colors));
+            }
         }
         else if (cshader == ColoringShader.HIGHT)
         {
-            gameObject.GetComponent<Renderer>().sharedMaterial = heightShaderMaterial;
-            gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", NoiseMapUtilities.GenerateColorMap(colors));
-            gameObject.GetComponent<Renderer>().sharedMaterial.SetFloat("_meshHeight", meshHeight);
+            if (!Application.isPlaying)
+            {
+                gameObject.GetComponent<Renderer>().sharedMaterial = heightShaderMaterial;
+                gameObject.GetComponent<Renderer>().sharedMaterial.SetTexture("_colorMap", NoiseMapUtilities.GenerateColorMap(colors));
+                gameObject.GetComponent<Renderer>().sharedMaterial.SetFloat("_meshHeight", meshHeight);
+            }
+            else
+            {
+                gameObject.GetComponent<Renderer>().material = heightShaderMaterial;
+                gameObject.GetComponent<Renderer>().material.SetTexture("_colorMap", NoiseMapUtilities.GenerateColorMap(colors));
+                gameObject.GetComponent<Renderer>().material.SetFloat("_meshHeight", meshHeight);
+            }
         }
     }
 
