@@ -103,4 +103,9 @@ public static class PerlinNoiseGenerator
         p = RandomPermutationTable();
     }
 
+    static public void RestoreKenPerlinPermutationTable()
+    {
+        p = KenPerlinPermutationTable();
+    }
+
 }

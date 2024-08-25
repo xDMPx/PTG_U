@@ -16,6 +16,11 @@ public class MapGenEditor : Editor
                 PerlinNoiseGenerator.RandomizePermutationTable();
                 mapgen.GenerateMap();
             }
+            if (GUILayout.Button("Ken Perlin Permutation Table"))
+            {
+                PerlinNoiseGenerator.RestoreKenPerlinPermutationTable();
+                mapgen.GenerateMap();
+            }
         }
     }
 }
