@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public static class NoiseBasedMesh
+static public class NoiseBasedMesh
 {
 
-    public static Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0, bool useAvg = false)
+    static public Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0, bool useAvg = false)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
@@ -23,7 +23,7 @@ public static class NoiseBasedMesh
         return mesh;
     }
 
-    public static Vector3[] MeshVertices(float[,] noiseMap, float meshHight, uint meshIncrement, bool useAvg)
+    static public Vector3[] MeshVertices(float[,] noiseMap, float meshHight, uint meshIncrement, bool useAvg)
     {
         uint width = (uint)noiseMap.GetLength(0) / meshIncrement;
         uint height = (uint)noiseMap.GetLength(1) / meshIncrement;
@@ -72,7 +72,7 @@ public static class NoiseBasedMesh
         return sum / count;
     }
 
-    public static int[] MeshTriangles(int width, int height, int vertices_len)
+    static public int[] MeshTriangles(int width, int height, int vertices_len)
     {
         int triangles_num = ((width * height) - (width + height - 1)) * 2;
         int[] triangles = new int[triangles_num * 3];
@@ -93,7 +93,7 @@ public static class NoiseBasedMesh
         return triangles;
     }
 
-    public static Vector2[] MeshUVs(Vector3[] vertices, int width, int height)
+    static public Vector2[] MeshUVs(Vector3[] vertices, int width, int height)
     {
         Vector2[] uvs = new Vector2[vertices.Length];
         for (int i = vertices.Length - 1; i >= 0; i--)

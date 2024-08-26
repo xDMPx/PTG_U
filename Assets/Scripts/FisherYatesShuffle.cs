@@ -1,10 +1,10 @@
 using System;
 
-public static class FisherYatesShuffle
+static public class FisherYatesShuffle
 {
     static Random rnd = new Random();
 
-    public static int[] Shuffle(int[] array)
+    static public int[] Shuffle(int[] array)
     {
         int length = array.Length;
 

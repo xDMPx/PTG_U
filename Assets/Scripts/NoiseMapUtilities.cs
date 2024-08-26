@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public static class NoiseMapUtilities
+static public class NoiseMapUtilities
 {
 
-    public static Texture2D GenerateNoiseTexture(float[,] noiseMap)
+    static public Texture2D GenerateNoiseTexture(float[,] noiseMap)
     {
         int mapWidth = noiseMap.GetLength(0);
         int mapHeight = noiseMap.GetLength(1);
@@ -25,7 +25,7 @@ public static class NoiseMapUtilities
         return texture;
     }
 
-    public static Texture2D GenerateColorMap(ColorThreshold[] colors)
+    static public Texture2D GenerateColorMap(ColorThreshold[] colors)
     {
         Texture2D colorTexture = new Texture2D(colors.Length, 2, TextureFormat.RGBA32, -1, true);
         Color[] color_data = new Color[2 * colors.Length];
@@ -46,7 +46,7 @@ public static class NoiseMapUtilities
         return colorTexture;
     }
 
-    public static float[,] GeneratePerlinNoiseMap(
+    static public float[,] GeneratePerlinNoiseMap(
             NoiseSource noiseSource,
             NoiseMapConfig noiseMapConfig,
             FBmParams fBmParams,
@@ -90,7 +90,7 @@ public static class NoiseMapUtilities
         return heightMap;
     }
 
-    public static float CalculateFBM(float x, float y, NoiseSource noiseSource, FBmParams fBmParams, float improvedNoiseZ = 1)
+    static public float CalculateFBM(float x, float y, NoiseSource noiseSource, FBmParams fBmParams, float improvedNoiseZ = 1)
     {
         float total = 0.0f;
         float sumOfAmplitudes = 0.0f;

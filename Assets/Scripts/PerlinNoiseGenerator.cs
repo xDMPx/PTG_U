@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Linq;
 
-public static class PerlinNoiseGenerator
+static public class PerlinNoiseGenerator
 {
     static int[] p = KenPerlinPermutationTable();
 
