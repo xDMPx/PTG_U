@@ -12,6 +12,7 @@ public class MapGen : MonoBehaviour
 
     public float meshHeight = 100f;
     public uint meshLOD = 0;
+    public bool useAvg = false;
 
     public bool autoUpdateInEditor = false;
     public bool applyEaseFunction = false;
@@ -82,7 +83,7 @@ public class MapGen : MonoBehaviour
                 applyCurve,
                 curve);
 
-        gameObject.GetComponent<MeshFilter>().mesh = NoiseBasedMesh.GenerateMeshfromNoiseMap(noiseMap, meshHeight, meshLOD);
+        gameObject.GetComponent<MeshFilter>().mesh = NoiseBasedMesh.GenerateMeshfromNoiseMap(noiseMap, meshHeight, meshLOD, useAvg);
 
         if (cshader == ColoringShader.TEXTURE || showNoisePlane)
         {

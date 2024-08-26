@@ -488,6 +488,7 @@ MonoBehaviour:
     octaveCount: 6
   meshHeight: 100
   meshLOD: 0
+  useAvg: 0
   autoUpdateInEditor: 1
   applyEaseFunction: 0
   applyCurve: 0

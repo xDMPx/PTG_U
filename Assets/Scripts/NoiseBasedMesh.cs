@@ -3,13 +3,13 @@ using UnityEngine;
 public static class NoiseBasedMesh
 {
 
-    public static Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0)
+    public static Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0, bool useAvg = false)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
         uint meshIncrement = LOD <= 0 ? 1 : LOD * 2;
-        Vector3[] vertices = MeshVertices(noiseMap, meshHight, meshIncrement);
+        Vector3[] vertices = MeshVertices(noiseMap, meshHight, meshIncrement, useAvg);
         mesh.vertices = vertices;
 
         int width = noiseMap.GetLength(0) / (int)meshIncrement;
@@ -23,7 +23,7 @@ public static class NoiseBasedMesh
         return mesh;
     }
 
-    public static Vector3[] MeshVertices(float[,] noiseMap, float meshHight, uint meshIncrement)
+    public static Vector3[] MeshVertices(float[,] noiseMap, float meshHight, uint meshIncrement, bool useAvg)
     {
         uint width = (uint)noiseMap.GetLength(0) / meshIncrement;
         uint height = (uint)noiseMap.GetLength(1) / meshIncrement;
@@ -35,12 +35,41 @@ public static class NoiseBasedMesh
             for (int x = 0; x < height; x++)
             {
                 vertices[y * width + x].x = (x - width / 2) * meshIncrement;
-                vertices[y * width + x].y = noiseMap[x, y] * meshHight;
+                if (!useAvg) vertices[y * width + x].y = noiseMap[x, y] * meshHight;
+                else vertices[y * width + x].y = AverageOfSurroundingCells(noiseMap, x, y) * meshHight;
                 vertices[y * width + x].z = (y - height / 2) * meshIncrement;
             }
         }
 
         return vertices;
+    }
+
+    static float AverageOfSurroundingCells(float[,] noiseMap, int x, int y)
+    {
+
+        int max_x = noiseMap.GetLength(0);
+        int max_y = noiseMap.GetLength(1);
+
+        (int, int)[] d = new (int, int)[]{
+            (-1,-1), (0,-1), (1,-1),
+            (-1,0),  (0,0),  (1,0),
+            (-1,1),  (0,1),  (1,1),
+        };
+
+        int count = 0;
+        float sum = 0;
+        foreach (var (dx, dy) in d)
+        {
+            int nx = x + dx;
+            int ny = y + dy;
+            if (nx >= 0 && nx < max_x && ny >= 0 && ny < max_y)
+            {
+                sum += noiseMap[nx, ny];
+                count += 1;
+            }
+        }
+
+        return sum / count;
     }
 
     public static int[] MeshTriangles(int width, int height, int vertices_len)
