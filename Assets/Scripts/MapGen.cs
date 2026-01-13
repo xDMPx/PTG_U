@@ -28,6 +28,7 @@ public class MapGen : MonoBehaviour
 
     public AnimationCurve curve;
     public bool showNoisePlane = true;
+    public bool showWaterPlane = true;
     public Material noisePlaneMaterial;
     public Material waterPlaneMaterial;
 
@@ -166,6 +167,12 @@ public class MapGen : MonoBehaviour
             waterPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
             waterPlane.name = "waterPlane";
         }
+        if (waterPlane != null && showWaterPlane == false)
+        {
+            DestroyImmediate(waterPlane);
+            return;
+        }
+
         waterPlane.GetComponent<Renderer>().material = waterPlaneMaterial;
         waterPlane.transform.localScale = new Vector3(noiseMapConfig.size / 10.0f, 1, noiseMapConfig.size / 10.0f);
         waterPlane.transform.position = new Vector3(gameObject.transform.position.x,

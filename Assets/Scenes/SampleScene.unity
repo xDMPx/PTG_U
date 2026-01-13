@@ -509,6 +509,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   showNoisePlane: 1
+  showWaterPlane: 1
   noisePlaneMaterial: {fileID: 2100000, guid: 82e61778d1b3a633aaf62ff878227cfa, type: 2}
   waterPlaneMaterial: {fileID: 2100000, guid: 88db5af91e006f047bbd3656a056fc72, type: 2}
   cshader: 1
