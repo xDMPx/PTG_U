@@ -65,6 +65,8 @@ public class MapGen : MonoBehaviour
         if (noiseMapConfig.scale < 0.1f) noiseMapConfig.scale = 0.1f;
         if (noiseMapConfig.offsetX < 0) noiseMapConfig.offsetX = 0;
         if (noiseMapConfig.offsetY < 0) noiseMapConfig.offsetY = 0;
+        if (noiseMapConfig.improvedNoiseMapSizeMultiplier == 0) noiseMapConfig.improvedNoiseMapSizeMultiplier = 1;
+        if (noiseMapConfig.improvedNoiseMapSizeMultiplier > 10) noiseMapConfig.improvedNoiseMapSizeMultiplier = 10;
         if (fBmParams.amplitude < 1) fBmParams.amplitude = 1;
         if (fBmParams.frequency < 1) fBmParams.frequency = 1;
         if (colors.Length < 1)

@@ -13,7 +13,7 @@ public class MapGenEditor : Editor
         {
             if (GUILayout.Button("Randomize Permutation Table"))
             {
-                PerlinNoiseGenerator.RandomizePermutationTable();
+                PerlinNoiseGenerator.RandomizePermutationTable(mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier);
                 mapgen.GenerateMap();
             }
             if (GUILayout.Button("Ken Perlin Permutation Table"))

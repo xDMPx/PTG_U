@@ -28,9 +28,12 @@ static public class PerlinNoiseGenerator
         return permutationTable;
     }
 
-    static int[] RandomPermutationTable()
+    static int[] RandomPermutationTable(uint multiplier)
     {
-        int[] permutationTable = new int[] { 151,160,137,91,90,15,
+        int[] permutationTable;
+        if (multiplier == 1)
+        {
+            permutationTable = new int[] { 151,160,137,91,90,15,
             131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
             190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
             88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
@@ -44,6 +47,18 @@ static public class PerlinNoiseGenerator
             49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
             138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
             };
+        }
+        else
+        {
+            int len = 256 * ((int)multiplier);
+            permutationTable = new int[len];
+            for (int i = 0; i < len; i++)
+            {
+                permutationTable[i] = i;
+            }
+        }
+
+        Debug.Log(permutationTable.Length);
 
         FisherYatesShuffle.Shuffle(permutationTable);
 
@@ -56,9 +71,9 @@ static public class PerlinNoiseGenerator
     // <-1,1>
     static public float PerlinNoise(float x, float y, float z = 1)
     {
-        int X = (int)Mathf.Floor(x) & 255,                                  // FIND UNIT CUBE THAT
-            Y = (int)Mathf.Floor(y) & 255,                                  // CONTAINS POINT.
-            Z = (int)Mathf.Floor(z) & 255;
+        int X = (int)Mathf.Floor(x) & ((p.Length / 2) - 1),                 // FIND UNIT CUBE THAT
+            Y = (int)Mathf.Floor(y) & ((p.Length / 2) - 1),                 // CONTAINS POINT.
+            Z = (int)Mathf.Floor(z) & ((p.Length / 2) - 1);
         x -= Mathf.Floor(x);                                                // FIND RELATIVE X,Y,Z
         y -= Mathf.Floor(y);                                                // OF POINT IN CUBE.
         z -= Mathf.Floor(z);
@@ -98,9 +113,9 @@ static public class PerlinNoiseGenerator
         return Mathf.InverseLerp(-1, 1, PerlinNoise(x, y, z));
     }
 
-    static public void RandomizePermutationTable()
+    static public void RandomizePermutationTable(uint multiplier = 1)
     {
-        p = RandomPermutationTable();
+        p = RandomPermutationTable(multiplier);
     }
 
     static public void RestoreKenPerlinPermutationTable()

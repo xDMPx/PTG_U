@@ -24,8 +24,9 @@ public struct NoiseMapConfig
     public float offsetX;
     public float offsetY;
     public float improvedNoiseZ;
+    public uint improvedNoiseMapSizeMultiplier;
 
-    public NoiseMapConfig(uint size, float scale, bool offsetBySize, float offsetX, float offsetY, float improvedNoiseZ = 1)
+    public NoiseMapConfig(uint size, float scale, bool offsetBySize, float offsetX, float offsetY, float improvedNoiseZ = 1, uint improvedNoiseMapSizeMultiplier = 1)
     {
         this.size = size;
         this.scale = scale;
@@ -33,6 +34,7 @@ public struct NoiseMapConfig
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.improvedNoiseZ = improvedNoiseZ;
+        this.improvedNoiseMapSizeMultiplier = improvedNoiseMapSizeMultiplier;
     }
 }
 
