@@ -11,6 +11,11 @@ public class MapGenEditor : Editor
         if (GUILayout.Button("Generate")) mapgen.GenerateMap();
         if (mapgen.noiseSource == NoiseSource.ImprovedNoise)
         {
+
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.IntField(new GUIContent("Permutation Table Size"), PerlinNoiseGenerator.GetPermutationTableSize());
+            EditorGUI.EndDisabledGroup();
+
             if (GUILayout.Button("Randomize Permutation Table"))
             {
                 PerlinNoiseGenerator.RandomizePermutationTable(mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier);

@@ -58,8 +58,6 @@ static public class PerlinNoiseGenerator
             }
         }
 
-        Debug.Log(permutationTable.Length);
-
         FisherYatesShuffle.Shuffle(permutationTable);
 
         permutationTable = permutationTable.Concat<int>(permutationTable).ToArray<int>();
@@ -121,6 +119,11 @@ static public class PerlinNoiseGenerator
     static public void RestoreKenPerlinPermutationTable()
     {
         p = KenPerlinPermutationTable();
+    }
+
+    static public int GetPermutationTableSize()
+    {
+        return p.Length / 2;
     }
 
 }
