@@ -487,6 +487,7 @@ MonoBehaviour:
     lacunarity: 2
     octaveCount: 6
   meshHeight: 100
+  waterPlaneThreshold: 0.1
   meshLOD: 0
   useAvg: 0
   autoUpdateInEditor: 1
@@ -509,6 +510,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   showNoisePlane: 1
   noisePlaneMaterial: {fileID: 2100000, guid: 82e61778d1b3a633aaf62ff878227cfa, type: 2}
+  waterPlaneMaterial: {fileID: 2100000, guid: 88db5af91e006f047bbd3656a056fc72, type: 2}
   cshader: 1
   textureShaderMaterial: {fileID: 2100000, guid: 6dc77fefb8c454252853cd5b197219eb,
     type: 2}

@@ -11,6 +11,7 @@ public class MapGen : MonoBehaviour
     public FBmParams fBmParams = new FBmParams(1, 1, 0.5f, 2.0f, 6);
 
     public float meshHeight = 100f;
+    public float waterPlaneThreshold = 0.1f;
     public uint meshLOD = 0;
     public bool useAvg = false;
 
@@ -28,8 +29,10 @@ public class MapGen : MonoBehaviour
     public AnimationCurve curve;
     public bool showNoisePlane = true;
     public Material noisePlaneMaterial;
+    public Material waterPlaneMaterial;
 
     private GameObject noisePlane;
+    private GameObject waterPlane;
     private Texture2D noiseTexture;
     private bool update = false;
 
@@ -137,6 +140,22 @@ public class MapGen : MonoBehaviour
                 gameObject.GetComponent<Renderer>().material.SetFloat("_meshHeight", meshHeight);
             }
         }
+
+        displayWaterPlain();
+    }
+
+    void displayWaterPlain()
+    {
+        if (waterPlane == null)
+        {
+            waterPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            waterPlane.name = "waterPlane";
+        }
+        waterPlane.GetComponent<Renderer>().material = waterPlaneMaterial;
+        waterPlane.transform.localScale = new Vector3(noiseMapConfig.size / 10.0f, 1, noiseMapConfig.size / 10.0f);
+        waterPlane.transform.position = new Vector3(gameObject.transform.position.x,
+                                          gameObject.transform.position.y + meshHeight * waterPlaneThreshold,
+                                        gameObject.transform.position.z);
     }
 
 }
