@@ -86,7 +86,22 @@ public class MapGen : MonoBehaviour
                 applyCurve,
                 curve);
 
-        gameObject.GetComponent<MeshFilter>().mesh = NoiseBasedMesh.GenerateMeshfromNoiseMap(noiseMap, meshHeight, meshLOD, useAvg);
+        if (!Application.isPlaying)
+        {
+            if (gameObject.GetComponent<MeshFilter>().sharedMesh != null)
+            {
+                DestroyImmediate(gameObject.GetComponent<MeshFilter>().sharedMesh);
+            }
+            gameObject.GetComponent<MeshFilter>().sharedMesh = NoiseBasedMesh.GenerateMeshfromNoiseMap(noiseMap, meshHeight, meshLOD, useAvg);
+        }
+        else
+        {
+            if (gameObject.GetComponent<MeshFilter>().mesh != null)
+            {
+                Destroy(gameObject.GetComponent<MeshFilter>().mesh);
+            }
+            gameObject.GetComponent<MeshFilter>().mesh = NoiseBasedMesh.GenerateMeshfromNoiseMap(noiseMap, meshHeight, meshLOD, useAvg);
+        }
 
         if (cshader == ColoringShader.TEXTURE || showNoisePlane)
         {
