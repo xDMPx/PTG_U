@@ -126,13 +126,28 @@ static public class NoiseMapUtilities
         jobHandle.Complete();
 
         float[,] heightMap = new float[size, size];
-        for (int y = 0; y < size; y++)
+        if (!applyCurve)
         {
-            for (int x = 0; x < size; x++)
+            System.Buffer.BlockCopy(
+               job.heightMap.ToArray(),
+                0,
+                heightMap,
+                0,
+                (int)(size * size) * sizeof(float)
+            );
+        }
+        else
+        {
+            for (int y = 0; y < size; y++)
             {
-                heightMap[x, y] = job.heightMap[(int)(y * size + x)];
-                if (applyCurve)
-                    heightMap[x, y] = curve.Evaluate(heightMap[x, y]);
+                for (int x = 0; x < size; x++)
+                {
+                    heightMap[x, y] = job.heightMap[(int)(y * size + x)];
+                    if (applyCurve)
+                    {
+                        heightMap[x, y] = curve.Evaluate(heightMap[x, y]);
+                    }
+                }
             }
         }
         job.heightMap.Dispose();
