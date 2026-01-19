@@ -8,6 +8,9 @@ static public class NoiseBasedMesh
         static public int height = 0;
         static public int vertices_len = 0;
         static public int[] triangles;
+        static public Vector2[] uv;
+        static public int uv_width = 0;
+        static public int uv_height = 0;
     }
 
     static public Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0, bool useAvg = false)
@@ -31,7 +34,13 @@ static public class NoiseBasedMesh
             MeshGenCache.triangles = MeshTriangles(width, height, vertices_len);
         }
         mesh.triangles = MeshGenCache.triangles;
-        mesh.uv = MeshUVs(mesh.vertices, noiseMap.GetLength(0), noiseMap.GetLength(1));
+        if (MeshGenCache.uv_width != noiseMap.GetLength(0) || MeshGenCache.uv_height != noiseMap.GetLength(0))
+        {
+            MeshGenCache.uv_width = noiseMap.GetLength(0);
+            MeshGenCache.uv_height = noiseMap.GetLength(1);
+            MeshGenCache.uv = MeshUVs(mesh.vertices, noiseMap.GetLength(0), noiseMap.GetLength(1));
+        }
+        mesh.uv = MeshGenCache.uv;
         mesh.RecalculateNormals();
 
         return mesh;
