@@ -1,4 +1,6 @@
 using UnityEngine;
+using Unity.Jobs;
+using Unity.Collections;
 
 static public class NoiseMapUtilities
 {
@@ -46,6 +48,45 @@ static public class NoiseMapUtilities
         return colorTexture;
     }
 
+    struct GeneratePerlinNoiseMapJob : IJobParallelFor
+    {
+        [ReadOnly]
+        public NoiseSource noiseSource;
+        [ReadOnly]
+        public uint size;
+        [ReadOnly]
+        public float scale;
+        [ReadOnly]
+        public float offsetX;
+        [ReadOnly]
+        public float offsetY;
+        [ReadOnly]
+        public float improvedNoiseZ;
+        [ReadOnly]
+        public FBmParams fBmParams;
+        [ReadOnly]
+        public bool applyEaseFunction;
+
+        public NativeArray<float> heightMap;
+
+        public void Execute(int i)
+        {
+            int y = i / ((int)size);
+            int x = i % ((int)size);
+            float pnX = (offsetX + (float)x) / scale;
+            float pnY = (offsetY + (float)y) / scale;
+            if (fBmParams.octaveCount > 1)
+                heightMap[i] = CalculateFBM(pnX, pnY, noiseSource, fBmParams, improvedNoiseZ);
+            else if (noiseSource == NoiseSource.ImprovedNoise)
+                heightMap[i] = PerlinNoiseGenerator.NormalizedPerlinNoise(pnX, pnY, improvedNoiseZ);
+            else
+                heightMap[i] = Mathf.PerlinNoise(pnX, pnY);
+            if (applyEaseFunction)
+                heightMap[i] = EaseFunction(heightMap[i]);
+        }
+
+    }
+
     static public float[,] GeneratePerlinNoiseMap(
             NoiseSource noiseSource,
             NoiseMapConfig noiseMapConfig,
@@ -66,26 +107,35 @@ static public class NoiseMapUtilities
             offsetY *= size;
         }
 
+        NativeArray<float> nativeHeightMap = new NativeArray<float>((int)(size * size), Allocator.Persistent);
+        GeneratePerlinNoiseMapJob job = new GeneratePerlinNoiseMapJob()
+        {
+            noiseSource = noiseSource,
+            size = size,
+            scale = scale,
+            offsetX = offsetX,
+            offsetY = offsetY,
+            improvedNoiseZ = improvedNoiseZ,
+            fBmParams = fBmParams,
+            applyEaseFunction = applyEaseFunction,
+            heightMap = nativeHeightMap,
+        };
+
+
+        JobHandle jobHandle = job.Schedule(nativeHeightMap.Length, 64);
+        jobHandle.Complete();
+
         float[,] heightMap = new float[size, size];
         for (int y = 0; y < size; y++)
         {
             for (int x = 0; x < size; x++)
             {
-                float pnX = (offsetX + (float)x) / scale;
-                float pnY = (offsetY + (float)y) / scale;
-                if (fBmParams.octaveCount > 1)
-                    heightMap[x, y] = CalculateFBM(pnX, pnY, noiseSource, fBmParams, improvedNoiseZ);
-                else if (noiseSource == NoiseSource.ImprovedNoise)
-                    heightMap[x, y] = PerlinNoiseGenerator.NormalizedPerlinNoise(pnX, pnY, improvedNoiseZ);
-                else
-                    heightMap[x, y] = Mathf.PerlinNoise(pnX, pnY);
-                if (applyEaseFunction)
-                    heightMap[x, y] = EaseFunction(heightMap[x, y]);
+                heightMap[x, y] = job.heightMap[(int)(y * size + x)];
                 if (applyCurve)
                     heightMap[x, y] = curve.Evaluate(heightMap[x, y]);
-
             }
         }
+        job.heightMap.Dispose();
 
         return heightMap;
     }
