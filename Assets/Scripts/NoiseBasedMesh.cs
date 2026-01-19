@@ -2,6 +2,13 @@ using UnityEngine;
 
 static public class NoiseBasedMesh
 {
+    static class MeshGenCache
+    {
+        static public int width = 0;
+        static public int height = 0;
+        static public int vertices_len = 0;
+        static public int[] triangles;
+    }
 
     static public Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0, bool useAvg = false)
     {
@@ -16,7 +23,14 @@ static public class NoiseBasedMesh
         int height = noiseMap.GetLength(1) / (int)meshIncrement;
         int vertices_len = width * height;
 
-        mesh.triangles = MeshTriangles(width, height, vertices_len);
+        if (MeshGenCache.width != width || MeshGenCache.height != height || MeshGenCache.vertices_len != vertices_len)
+        {
+            MeshGenCache.width = width;
+            MeshGenCache.height = height;
+            MeshGenCache.vertices_len = vertices_len;
+            MeshGenCache.triangles = MeshTriangles(width, height, vertices_len);
+        }
+        mesh.triangles = MeshGenCache.triangles;
         mesh.uv = MeshUVs(mesh.vertices, noiseMap.GetLength(0), noiseMap.GetLength(1));
         mesh.RecalculateNormals();
 
