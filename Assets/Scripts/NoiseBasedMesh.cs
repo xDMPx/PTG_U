@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Threading;
 
 static public class NoiseBasedMesh
 {
@@ -130,26 +131,30 @@ static public class NoiseBasedMesh
 
     public static void ExportMeshToPLY(Mesh mesh)
     {
-        using System.IO.StreamWriter file = new("mesh.ply", append: false);
-        file.WriteLine("ply");
-        file.WriteLine("format ascii 1.0");
-        file.WriteLine("element vertex " + mesh.vertices.Length);
-        file.WriteLine("property float x");
-        file.WriteLine("property float y");
-        file.WriteLine("property float z");
-        file.WriteLine("element face " + mesh.triangles.Length / 3);
-        file.WriteLine("property list uchar uint vertex_indices");
-        file.WriteLine("end_header");
-
         int[] triangles = mesh.triangles;
         Vector3[] vertices = mesh.vertices;
+        Thread exportThread = new Thread(() =>
+        {
+            using System.IO.StreamWriter file = new("mesh.ply", append: false);
+            file.WriteLine("ply");
+            file.WriteLine("format ascii 1.0");
+            file.WriteLine("element vertex " + vertices.Length);
+            file.WriteLine("property float x");
+            file.WriteLine("property float y");
+            file.WriteLine("property float z");
+            file.WriteLine("element face " + triangles.Length / 3);
+            file.WriteLine("property list uchar uint vertex_indices");
+            file.WriteLine("end_header");
 
-        for (int i = 0; i < vertices.Length; i++)
-            file.WriteLine(vertices[i].x + " " + vertices[i].y + " " + vertices[i].z);
-        for (int i = 0; i < triangles.Length; i += 3)
-            file.WriteLine("3 " + triangles[i] + " " + triangles[i + 1] + " " + triangles[i + 2]);
 
-        Debug.Log("Mesh exported");
+            for (int i = 0; i < vertices.Length; i++)
+                file.WriteLine(vertices[i].x + " " + vertices[i].y + " " + vertices[i].z);
+            for (int i = 0; i < triangles.Length; i += 3)
+                file.WriteLine("3 " + triangles[i] + " " + triangles[i + 1] + " " + triangles[i + 2]);
+
+            Debug.Log("Mesh exported");
+        });
+        exportThread.Start();
     }
 
 }
