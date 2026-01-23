@@ -12,6 +12,9 @@ public class UIController : MonoBehaviour
     FloatField offsetYFF;
     Toggle offsetBySizeT;
 
+
+    DropdownField noiseSource_DF;
+
     Button generateButton;
 
     public MapGen mapgen;
@@ -120,6 +123,27 @@ public class UIController : MonoBehaviour
             mapgen.noiseMapConfig.offsetY = offsetYFF.value;
         });
 
+        //NoiseSource
+        noiseSource_DF = root.Q<DropdownField>("NoiseSource_DF");
+        noiseSource_DF.RegisterValueChangedCallback(x =>
+        {
+            if (x.newValue == "Unity")
+            {
+                mapgen.noiseSource = NoiseSource.Unity;
+            }
+            else if (x.newValue == "Improved Noise")
+            {
+                mapgen.noiseSource = NoiseSource.ImprovedNoise;
+            }
+        });
+        if (mapgen.noiseSource == NoiseSource.Unity)
+        {
+            noiseSource_DF.value = noiseSource_DF.choices[0];
+        }
+        else if (mapgen.noiseSource == NoiseSource.ImprovedNoise)
+        {
+            noiseSource_DF.value = noiseSource_DF.choices[1];
+        }
 
         // Generate
         generateButton = root.Q<Button>("Generate_B");

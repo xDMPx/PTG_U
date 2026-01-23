@@ -21,6 +21,8 @@
                 <ui:FloatField value="1000" name="OffsetY_FF" style="flex-direction: column; width: 20%;" />
             </ui:GroupBox>
             <ui:VisualElement style="height: 20px;" />
+            <ui:DropdownField name="NoiseSource_DF" label="Noise Source:" choices="Unity,Improved Noise" style="flex-direction: column;" />
+            <ui:VisualElement style="height: 20px;" />
             <ui:Button text="Confirm" display-tooltip-when-elided="true" name="Generate_B" style="width: 25%; visibility: visible; color: rgb(35, 36, 35);" />
         </ui:ScrollView>
     </ui:GroupBox>
