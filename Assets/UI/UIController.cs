@@ -17,6 +17,8 @@ public class UIController : MonoBehaviour
     Toggle applyEaseFunctionT;
     Toggle useAvgT;
 
+    DropdownField cShader_DF;
+
     Button generateButton;
 
     public MapGen mapgen;
@@ -165,6 +167,27 @@ public class UIController : MonoBehaviour
             mapgen.useAvg = x.newValue;
         });
 
+        //CShader
+        cShader_DF = root.Q<DropdownField>("CShader_DF");
+        cShader_DF.RegisterValueChangedCallback(x =>
+        {
+            if (x.newValue == "Height")
+            {
+                mapgen.cshader = ColoringShader.HEIGHT;
+            }
+            else if (x.newValue == "Texture")
+            {
+                mapgen.cshader = ColoringShader.TEXTURE;
+            }
+        });
+        if (mapgen.cshader == ColoringShader.HEIGHT)
+        {
+            cShader_DF.value = cShader_DF.choices[0];
+        }
+        else if (mapgen.cshader == ColoringShader.TEXTURE)
+        {
+            cShader_DF.value = cShader_DF.choices[1];
+        }
 
 
         // Generate

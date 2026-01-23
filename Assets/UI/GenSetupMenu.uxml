@@ -25,6 +25,8 @@
             <ui:Toggle label="Ease Function:" name="ApplyEaseFunction_T" value="False" />
             <ui:Toggle label="Use Avg:" name="UseAvg_T" value="False" />
             <ui:VisualElement style="height: 20px;" />
+            <ui:DropdownField name="CShader_DF" label="CShader:" choices="Height,Texture" style="flex-direction: column; height: -47px;" />
+            <ui:VisualElement style="height: 20px;" />
             <ui:Button text="Confirm" display-tooltip-when-elided="true" name="Generate_B" style="width: 25%; visibility: visible; color: rgb(35, 36, 35);" />
         </ui:ScrollView>
     </ui:GroupBox>
