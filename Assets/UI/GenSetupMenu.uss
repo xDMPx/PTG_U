@@ -1,0 +1,11 @@
+.unity-group-box {
+    background-color: rgba(111, 122, 144, 255);
+}
+
+.unity-label {
+    font-size: 12px;
+}
+
+.unity-base-text-field__input {
+    font-size: 12px;
+}

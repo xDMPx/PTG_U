@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/GenSetupMenu.uss?fileID=7433441132597879392&amp;guid=fa03e8fcd0556e90b9dedd7c2ab6df41&amp;type=3#GenSetupMenu" />
+    <ui:GroupBox style="width: 25%; flex-direction: column; height: 100%;">
+        <ui:ScrollView mode="Vertical" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Auto">
+            <ui:GroupBox name="OffsetX">
+                <ui:Label tabindex="-1" text="OffsetX" display-tooltip-when-elided="true" />
+                <ui:FloatField value="1000" name="OffsetX_FF" style="flex-direction: column; width: 20%;" />
+            </ui:GroupBox>
+            <ui:GroupBox name="OffsetY">
+                <ui:Label tabindex="-1" text="OffsetY" display-tooltip-when-elided="true" />
+                <ui:FloatField value="1000" name="OffsetY_FF" style="flex-direction: column; width: 20%;" />
+            </ui:GroupBox>
+            <ui:VisualElement style="height: 20px;" />
+            <ui:Button text="Confirm" display-tooltip-when-elided="true" name="Generate_B" style="width: 25%; visibility: visible; color: rgb(35, 36, 35);" />
+        </ui:ScrollView>
+    </ui:GroupBox>
+</ui:UXML>
