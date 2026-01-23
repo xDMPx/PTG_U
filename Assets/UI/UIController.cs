@@ -14,6 +14,8 @@ public class UIController : MonoBehaviour
 
 
     DropdownField noiseSource_DF;
+    Toggle applyEaseFunctionT;
+    Toggle useAvgT;
 
     Button generateButton;
 
@@ -144,6 +146,26 @@ public class UIController : MonoBehaviour
         {
             noiseSource_DF.value = noiseSource_DF.choices[1];
         }
+
+        //ApplyEaseFunction
+        applyEaseFunctionT = root.Q<Toggle>("ApplyEaseFunction_T");
+        applyEaseFunctionT.value = mapgen.applyEaseFunction;
+        applyEaseFunctionT.RegisterValueChangedCallback(x =>
+        {
+            Validate();
+            mapgen.applyEaseFunction = x.newValue;
+        });
+
+        //ApplyEaseFunction
+        useAvgT = root.Q<Toggle>("UseAvg_T");
+        useAvgT.value = mapgen.useAvg;
+        useAvgT.RegisterValueChangedCallback(x =>
+        {
+            Validate();
+            mapgen.useAvg = x.newValue;
+        });
+
+
 
         // Generate
         generateButton = root.Q<Button>("Generate_B");

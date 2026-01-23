@@ -11,7 +11,7 @@
                 <ui:FloatField value="110.3" name="Scale_FF" style="width: 20%; flex-direction: column;" />
                 <ui:Slider value="110.3" high-value="1000" name="Scale_S" low-value="0.1" style="flex-direction: column; align-items: flex-start; justify-content: space-between;" />
             </ui:GroupBox>
-            <ui:Toggle label="Offset by size" name="OffsetBySize_T" value="False" />
+            <ui:Toggle label="Offset by size:" name="OffsetBySize_T" value="False" />
             <ui:GroupBox name="OffsetX">
                 <ui:Label tabindex="-1" text="OffsetX" display-tooltip-when-elided="true" />
                 <ui:FloatField value="1000" name="OffsetX_FF" style="flex-direction: column; width: 20%;" />
@@ -22,6 +22,8 @@
             </ui:GroupBox>
             <ui:VisualElement style="height: 20px;" />
             <ui:DropdownField name="NoiseSource_DF" label="Noise Source:" choices="Unity,Improved Noise" style="flex-direction: column;" />
+            <ui:Toggle label="Ease Function:" name="ApplyEaseFunction_T" value="False" />
+            <ui:Toggle label="Use Avg:" name="UseAvg_T" value="False" />
             <ui:VisualElement style="height: 20px;" />
             <ui:Button text="Confirm" display-tooltip-when-elided="true" name="Generate_B" style="width: 25%; visibility: visible; color: rgb(35, 36, 35);" />
         </ui:ScrollView>
