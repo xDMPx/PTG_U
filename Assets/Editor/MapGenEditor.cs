@@ -27,5 +27,16 @@ public class MapGenEditor : Editor
                 mapgen.GenerateMap();
             }
         }
+        if (GUILayout.Button("Export Mesh"))
+            if (!Application.isPlaying)
+            {
+                Mesh mesh = mapgen.gameObject.GetComponent<MeshFilter>().sharedMesh;
+                NoiseBasedMesh.ExportMeshToPLY(mesh);
+            }
+            else
+            {
+                Mesh mesh = mapgen.gameObject.GetComponent<MeshFilter>().sharedMesh;
+                NoiseBasedMesh.ExportMeshToPLY(mesh);
+            }
     }
 }
