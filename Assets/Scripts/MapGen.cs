@@ -143,7 +143,7 @@ public class MapGen : MonoBehaviour
                 gameObject.GetComponent<Renderer>().material.SetTexture("_colorMap", NoiseMapUtilities.GenerateColorMap(colors));
             }
         }
-        else if (cshader == ColoringShader.HIGHT)
+        else if (cshader == ColoringShader.HEIGHT)
         {
             if (!Application.isPlaying)
             {

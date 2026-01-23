@@ -14,13 +14,13 @@ static public class NoiseBasedMesh
         static public int uv_height = 0;
     }
 
-    static public Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHight, uint LOD = 0, bool useAvg = false)
+    static public Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHeight, uint LOD = 0, bool useAvg = false)
     {
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
         uint meshIncrement = LOD <= 0 ? 1 : LOD * 2;
-        Vector3[] vertices = MeshVertices(noiseMap, meshHight, meshIncrement, useAvg);
+        Vector3[] vertices = MeshVertices(noiseMap, meshHeight, meshIncrement, useAvg);
         mesh.vertices = vertices;
 
         int width = noiseMap.GetLength(0) / (int)meshIncrement;
@@ -47,7 +47,7 @@ static public class NoiseBasedMesh
         return mesh;
     }
 
-    static public Vector3[] MeshVertices(float[,] noiseMap, float meshHight, uint meshIncrement, bool useAvg)
+    static public Vector3[] MeshVertices(float[,] noiseMap, float meshHeight, uint meshIncrement, bool useAvg)
     {
         uint width = (uint)noiseMap.GetLength(0) / meshIncrement;
         uint height = (uint)noiseMap.GetLength(1) / meshIncrement;
@@ -59,8 +59,8 @@ static public class NoiseBasedMesh
             for (int x = 0; x < height; x++)
             {
                 vertices[y * width + x].x = (x - width / 2) * meshIncrement;
-                if (!useAvg) vertices[y * width + x].y = noiseMap[x, y] * meshHight;
-                else vertices[y * width + x].y = AverageOfSurroundingCells(noiseMap, x, y) * meshHight;
+                if (!useAvg) vertices[y * width + x].y = noiseMap[x, y] * meshHeight;
+                else vertices[y * width + x].y = AverageOfSurroundingCells(noiseMap, x, y) * meshHeight;
                 vertices[y * width + x].z = (y - height / 2) * meshIncrement;
             }
         }

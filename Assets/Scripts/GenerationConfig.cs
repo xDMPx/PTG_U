@@ -11,7 +11,7 @@ public enum NoiseSource
 [Serializable]
 public enum ColoringShader
 {
-    HIGHT,
+    HEIGHT,
     TEXTURE,
 }
 
