@@ -11,6 +11,9 @@ public class UIController : MonoBehaviour
     FloatField offsetXFF;
     FloatField offsetYFF;
     Toggle offsetBySizeT;
+    GroupBox improvedNoise_GB;
+    FloatField inOffsetZFF;
+    IntegerField inMapSizeMulIF;
 
     FloatField meshHeightFF;
     IntegerField lodIF;
@@ -49,6 +52,9 @@ public class UIController : MonoBehaviour
             Validate();
             PerlinNoiseGenerator.RestoreKenPerlinPermutationTable();
         };
+
+        //ImprovedNoiseConfig
+        improvedNoise_GB = root.Q<GroupBox>("ImprovedNoise_GB");
 
         //Size
         sizeIF = root.Q<IntegerField>("Size_IF");
@@ -150,6 +156,40 @@ public class UIController : MonoBehaviour
             mapgen.noiseMapConfig.offsetY = offsetYFF.value;
         });
 
+        //ImprovedNoiseConfigOffsetZ
+        inOffsetZFF = root.Q<FloatField>("InOffsetZ_FF");
+        inOffsetZFF.value = mapgen.noiseMapConfig.improvedNoiseZ;
+        inOffsetZFF.RegisterCallback<KeyDownEvent>(x =>
+        {
+            if (x.keyCode == KeyCode.Return)
+            {
+                Validate();
+                mapgen.noiseMapConfig.improvedNoiseZ = inOffsetZFF.value;
+            }
+        });
+        inOffsetZFF.RegisterCallback<FocusOutEvent>(x =>
+        {
+            Validate();
+            mapgen.noiseMapConfig.improvedNoiseZ = inOffsetZFF.value;
+        });
+
+        //ImprovedNoiseConfigMapSizeMultiplier
+        inMapSizeMulIF = root.Q<IntegerField>("InMapSizeMul_IF");
+        inMapSizeMulIF.value = (int)mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier;
+        inMapSizeMulIF.RegisterCallback<KeyDownEvent>(x =>
+        {
+            if (x.keyCode == KeyCode.Return)
+            {
+                Validate();
+                mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier = (uint)inMapSizeMulIF.value;
+            }
+        });
+        inMapSizeMulIF.RegisterCallback<FocusOutEvent>(x =>
+        {
+            Validate();
+            mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier = (uint)inMapSizeMulIF.value;
+        });
+
         //MeshHeight
         meshHeightFF = root.Q<FloatField>("MeshHeight_FF");
         meshHeightFF.value = mapgen.meshHeight;
@@ -200,11 +240,13 @@ public class UIController : MonoBehaviour
             {
                 randomizePT_Button.style.display = DisplayStyle.Flex;
                 kenPerlinPT_Button.style.display = DisplayStyle.Flex;
+                improvedNoise_GB.style.display = DisplayStyle.Flex;
             }
             else
             {
                 randomizePT_Button.style.display = DisplayStyle.None;
                 kenPerlinPT_Button.style.display = DisplayStyle.None;
+                improvedNoise_GB.style.display = DisplayStyle.None;
             }
         });
         if (mapgen.noiseSource == NoiseSource.Unity)

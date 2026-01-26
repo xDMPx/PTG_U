@@ -20,6 +20,16 @@
                 <ui:Label tabindex="-1" text="OffsetY" display-tooltip-when-elided="true" />
                 <ui:FloatField value="1000" name="OffsetY_FF" style="flex-direction: column; width: 20%;" />
             </ui:GroupBox>
+            <ui:GroupBox name="ImprovedNoise_GB" text="Improved Noise">
+                <ui:GroupBox>
+                    <ui:Label tabindex="-1" text="OffsetZ" display-tooltip-when-elided="true" />
+                    <ui:FloatField value="1" name="InOffsetZ_FF" style="flex-direction: column; width: 20%;" />
+                </ui:GroupBox>
+                <ui:GroupBox>
+                    <ui:Label tabindex="-1" text="Map Size Multiplier" display-tooltip-when-elided="true" />
+                    <ui:IntegerField value="1" name="InMapSizeMul_IF" style="flex-direction: column; width: 20%;" />
+                </ui:GroupBox>
+            </ui:GroupBox>
             <ui:VisualElement style="height: 20px;" />
             <ui:GroupBox name="MeshHeight">
                 <ui:Label tabindex="-1" text="Mesh Height" display-tooltip-when-elided="true" />
