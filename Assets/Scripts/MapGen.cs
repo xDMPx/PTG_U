@@ -95,7 +95,12 @@ public class MapGen : MonoBehaviour
             {
                 DestroyImmediate(gameObject.GetComponent<MeshFilter>().sharedMesh);
             }
+            //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            //sw.Start();
             gameObject.GetComponent<MeshFilter>().sharedMesh = NoiseBasedMesh.GenerateMeshfromNoiseMap(noiseMap, meshHeight, meshLOD, useAvg);
+            //sw.Stop();
+            //Debug.Log($"MeshGen 1000 avg cache: {sw.Elapsed.TotalSeconds / 1000}");
+
         }
         else
         {

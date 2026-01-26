@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI/GenSetupMenu.uss?fileID=7433441132597879392&amp;guid=fa03e8fcd0556e90b9dedd7c2ab6df41&amp;type=3#GenSetupMenu" />
     <ui:GroupBox style="width: 25%; flex-direction: column; height: 100%;">
         <ui:ScrollView mode="Vertical" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Auto">
-            <ui:GroupBox name="Size">
+            <ui:GroupBox name="Size" style="display: flex;">
                 <ui:Label tabindex="-1" text="Size" display-tooltip-when-elided="true" />
                 <ui:IntegerField value="500" name="Size_IF" style="width: 20%; flex-direction: column;" />
                 <ui:SliderInt picking-mode="Ignore" value="500" high-value="3000" name="Size_SI" low-value="100" style="flex-direction: column; flex-wrap: nowrap; align-items: flex-start; justify-content: space-between; flex-shrink: 0;" />
@@ -26,6 +26,9 @@
             <ui:Toggle label="Use Avg:" name="UseAvg_T" value="False" />
             <ui:VisualElement style="height: 20px;" />
             <ui:DropdownField name="CShader_DF" label="CShader:" choices="Height,Texture" style="flex-direction: column; height: -47px;" />
+            <ui:VisualElement style="height: 20px;" />
+            <ui:Toggle name="WaterPlane_T" label="Water Plane:" />
+            <ui:Toggle name="NoisePlane_T" label="Noise Plane:" />
             <ui:VisualElement style="height: 20px;" />
             <ui:Button text="Confirm" display-tooltip-when-elided="true" name="Generate_B" style="width: 25%; visibility: visible; color: rgb(35, 36, 35);" />
         </ui:ScrollView>

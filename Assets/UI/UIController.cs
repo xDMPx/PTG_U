@@ -18,6 +18,8 @@ public class UIController : MonoBehaviour
     Toggle useAvgT;
 
     DropdownField cShader_DF;
+    Toggle noisePlaneT;
+    Toggle waterPlaneT;
 
     Button generateButton;
 
@@ -189,6 +191,23 @@ public class UIController : MonoBehaviour
             cShader_DF.value = cShader_DF.choices[1];
         }
 
+        //ShowWaterPlane
+        waterPlaneT = root.Q<Toggle>("WaterPlane_T");
+        waterPlaneT.value = mapgen.showWaterPlane;
+        waterPlaneT.RegisterValueChangedCallback(x =>
+        {
+            Validate();
+            mapgen.showWaterPlane = x.newValue;
+        });
+
+        //ShowNoisePlane
+        noisePlaneT = root.Q<Toggle>("NoisePlane_T");
+        noisePlaneT.value = mapgen.showNoisePlane;
+        noisePlaneT.RegisterValueChangedCallback(x =>
+        {
+            Validate();
+            mapgen.showNoisePlane = x.newValue;
+        });
 
         // Generate
         generateButton = root.Q<Button>("Generate_B");
