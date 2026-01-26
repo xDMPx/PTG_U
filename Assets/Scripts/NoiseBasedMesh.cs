@@ -135,7 +135,9 @@ static public class NoiseBasedMesh
         Vector3[] vertices = mesh.vertices;
         Thread exportThread = new Thread(() =>
         {
-            using System.IO.StreamWriter file = new("mesh.ply", append: false);
+            System.DateTime now = System.DateTime.Now;
+            string filename = $"mesh_{now.ToString("yyyy_MM_dd_hh_mm_ss")}.ply";
+            using System.IO.StreamWriter file = new(filename, append: false);
             file.WriteLine("ply");
             file.WriteLine("format ascii 1.0");
             file.WriteLine("element vertex " + vertices.Length);
@@ -152,7 +154,7 @@ static public class NoiseBasedMesh
             for (int i = 0; i < triangles.Length; i += 3)
                 file.WriteLine("3 " + triangles[i] + " " + triangles[i + 1] + " " + triangles[i + 2]);
 
-            Debug.Log("Mesh exported");
+            Debug.Log($"Mesh exported: {filename}");
         });
         exportThread.Start();
     }
