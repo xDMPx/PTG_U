@@ -21,6 +21,15 @@
                 <ui:FloatField value="1000" name="OffsetY_FF" style="flex-direction: column; width: 20%;" />
             </ui:GroupBox>
             <ui:VisualElement style="height: 20px;" />
+            <ui:GroupBox name="MeshHeight">
+                <ui:Label tabindex="-1" text="Mesh Height" display-tooltip-when-elided="true" />
+                <ui:FloatField value="100" name="MeshHeight_FF" style="flex-direction: column; width: 20%;" />
+            </ui:GroupBox>
+            <ui:GroupBox name="LOD">
+                <ui:Label tabindex="-1" text="LOD" display-tooltip-when-elided="true" />
+                <ui:IntegerField value="500" name="LOD_IF" style="width: 20%; flex-direction: column;" />
+            </ui:GroupBox>
+            <ui:VisualElement style="height: 20px;" />
             <ui:DropdownField name="NoiseSource_DF" label="Noise Source:" choices="Unity,Improved Noise" style="flex-direction: column;" />
             <ui:Toggle label="Ease Function:" name="ApplyEaseFunction_T" value="False" />
             <ui:Toggle label="Use Avg:" name="UseAvg_T" value="False" />

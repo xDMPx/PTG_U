@@ -12,6 +12,8 @@ public class UIController : MonoBehaviour
     FloatField offsetYFF;
     Toggle offsetBySizeT;
 
+    FloatField meshHeightFF;
+    IntegerField lodIF;
 
     DropdownField noiseSource_DF;
     Toggle applyEaseFunctionT;
@@ -127,6 +129,40 @@ public class UIController : MonoBehaviour
         {
             Validate();
             mapgen.noiseMapConfig.offsetY = offsetYFF.value;
+        });
+
+        //MeshHeight
+        meshHeightFF = root.Q<FloatField>("MeshHeight_FF");
+        meshHeightFF.value = mapgen.meshHeight;
+        meshHeightFF.RegisterCallback<KeyDownEvent>(x =>
+        {
+            if (x.keyCode == KeyCode.Return)
+            {
+                Validate();
+                mapgen.meshHeight = meshHeightFF.value;
+            }
+        });
+        meshHeightFF.RegisterCallback<FocusOutEvent>(x =>
+        {
+            Validate();
+            mapgen.meshHeight = meshHeightFF.value;
+        });
+
+        //MeshLOD
+        lodIF = root.Q<IntegerField>("LOD_IF");
+        lodIF.value = (int)mapgen.meshLOD;
+        lodIF.RegisterCallback<KeyDownEvent>(x =>
+        {
+            if (x.keyCode == KeyCode.Return)
+            {
+                Validate();
+                mapgen.meshLOD = (uint)lodIF.value;
+            }
+        });
+        lodIF.RegisterCallback<FocusOutEvent>(x =>
+        {
+            Validate();
+            mapgen.meshLOD = (uint)lodIF.value;
         });
 
         //NoiseSource
