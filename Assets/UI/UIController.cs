@@ -26,6 +26,7 @@ public class UIController : MonoBehaviour
     Button randomizePT_Button;
     Button kenPerlinPT_Button;
 
+    Button exportMeshButton;
     Button generateButton;
 
     public MapGen mapgen;
@@ -273,7 +274,17 @@ public class UIController : MonoBehaviour
             mapgen.showNoisePlane = x.newValue;
         });
 
-        // Generate
+        //ExportMesh
+        exportMeshButton = root.Q<Button>("ExportMesh_B");
+        exportMeshButton.clicked += () =>
+        {
+            Validate();
+            mapgen.GenerateMap();
+            Mesh mesh = mapgen.gameObject.GetComponent<MeshFilter>().sharedMesh;
+            NoiseBasedMesh.ExportMeshToPLY(mesh);
+        };
+
+        //Generate
         generateButton = root.Q<Button>("Generate_B");
         generateButton.clicked += () =>
         {
