@@ -23,6 +23,9 @@ public class UIController : MonoBehaviour
     Toggle noisePlaneT;
     Toggle waterPlaneT;
 
+    Button randomizePT_Button;
+    Button kenPerlinPT_Button;
+
     Button generateButton;
 
     public MapGen mapgen;
@@ -30,6 +33,21 @@ public class UIController : MonoBehaviour
     private void OnEnable()
     {
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+
+        //Randomize Permutation Table
+        randomizePT_Button = root.Q<Button>("RandomizePT_B");
+        randomizePT_Button.clicked += () =>
+        {
+            Validate();
+            PerlinNoiseGenerator.RandomizePermutationTable(mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier);
+        };
+        //Ken Perlin Permutation Table
+        kenPerlinPT_Button = root.Q<Button>("KenPerlinPT_B");
+        kenPerlinPT_Button.clicked += () =>
+        {
+            Validate();
+            PerlinNoiseGenerator.RestoreKenPerlinPermutationTable();
+        };
 
         //Size
         sizeIF = root.Q<IntegerField>("Size_IF");
@@ -176,6 +194,16 @@ public class UIController : MonoBehaviour
             else if (x.newValue == "Improved Noise")
             {
                 mapgen.noiseSource = NoiseSource.ImprovedNoise;
+            }
+            if (mapgen.noiseSource == NoiseSource.ImprovedNoise)
+            {
+                randomizePT_Button.style.display = DisplayStyle.Flex;
+                kenPerlinPT_Button.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                randomizePT_Button.style.display = DisplayStyle.None;
+                kenPerlinPT_Button.style.display = DisplayStyle.None;
             }
         });
         if (mapgen.noiseSource == NoiseSource.Unity)

@@ -39,6 +39,9 @@
             <ui:Toggle name="WaterPlane_T" label="Water Plane:" />
             <ui:Toggle name="NoisePlane_T" label="Noise Plane:" />
             <ui:VisualElement style="height: 20px;" />
+            <ui:Button text="Randomize Permutation Table" display-tooltip-when-elided="true" name="RandomizePT_B" style="visibility: visible; color: rgb(35, 36, 35); display: none;" />
+            <ui:Button text="Ken Perlin Permutation Table" display-tooltip-when-elided="true" name="KenPerlinPT_B" style="visibility: visible; color: rgb(35, 36, 35); display: none;" />
+            <ui:VisualElement style="height: 20px;" />
             <ui:Button text="Confirm" display-tooltip-when-elided="true" name="Generate_B" style="width: 25%; visibility: visible; color: rgb(35, 36, 35);" />
         </ui:ScrollView>
     </ui:GroupBox>
