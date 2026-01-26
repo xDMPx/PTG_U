@@ -69,6 +69,7 @@ public class MapGen : MonoBehaviour
         if (noiseMapConfig.improvedNoiseMapSizeMultiplier > 10) noiseMapConfig.improvedNoiseMapSizeMultiplier = 10;
         if (fBmParams.amplitude < 1) fBmParams.amplitude = 1;
         if (fBmParams.frequency < 1) fBmParams.frequency = 1;
+        if (meshHeight < 0) meshHeight = 1;
         if (colors.Length < 1)
         {
             Array.Resize(ref colors, 1);

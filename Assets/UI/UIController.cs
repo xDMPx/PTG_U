@@ -262,6 +262,8 @@ public class UIController : MonoBehaviour
         if (scaleS.value < 0.1f) scaleS.value = 0.1f;
         if (offsetXFF.value < 0) offsetXFF.value = 0;
         if (offsetYFF.value < 0) offsetYFF.value = 0;
+        if (meshHeightFF.value < 0) meshHeightFF.value = 1;
+        if (lodIF.value < 0) lodIF.value = 0;
     }
 
     void Update()
