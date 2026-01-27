@@ -374,6 +374,9 @@ public class UIController : MonoBehaviour
         if (scaleS.value < 0.1f) scaleS.value = 0.1f;
         if (offsetXFF.value < 0) offsetXFF.value = 0;
         if (offsetYFF.value < 0) offsetYFF.value = 0;
+        if (inOffsetZFF.value < 0) inOffsetZFF.value = 0;
+        if (inMapSizeMulIF.value == 0) inMapSizeMulIF.value = 1;
+        if (inMapSizeMulIF.value > 10) inMapSizeMulIF.value = 10;
         if (meshHeightFF.value < 0) meshHeightFF.value = 1;
         if (lodIF.value < 0) lodIF.value = 0;
         if (waterPlaneThresholdS.value < 0.01) waterPlaneThresholdS.value = 0.01f;
