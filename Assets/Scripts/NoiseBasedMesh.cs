@@ -12,6 +12,7 @@ static public class NoiseBasedMesh
         static public Vector2[] uv;
         static public int uv_width = 0;
         static public int uv_height = 0;
+        static public uint mesh_increment;
     }
 
     static public Mesh GenerateMeshfromNoiseMap(float[,] noiseMap, float meshHeight, uint LOD = 0, bool useAvg = false)
@@ -27,19 +28,26 @@ static public class NoiseBasedMesh
         int height = noiseMap.GetLength(1) / (int)meshIncrement;
         int vertices_len = width * height;
 
-        if (MeshGenCache.width != width || MeshGenCache.height != height || MeshGenCache.vertices_len != vertices_len)
+        bool updateCache = false;
+        if (MeshGenCache.width != width || MeshGenCache.height != height || MeshGenCache.vertices_len != vertices_len || MeshGenCache.mesh_increment != meshIncrement)
+        {
+            updateCache = true;
+            MeshGenCache.triangles = MeshTriangles(width, height, vertices_len);
+        }
+        mesh.triangles = MeshGenCache.triangles;
+        if (MeshGenCache.uv_width != noiseMap.GetLength(0) || MeshGenCache.uv_height != noiseMap.GetLength(0) || MeshGenCache.mesh_increment != meshIncrement)
+        {
+            updateCache = true;
+            MeshGenCache.uv = MeshUVs(mesh.vertices, noiseMap.GetLength(0), noiseMap.GetLength(1));
+        }
+        if (updateCache)
         {
             MeshGenCache.width = width;
             MeshGenCache.height = height;
             MeshGenCache.vertices_len = vertices_len;
-            MeshGenCache.triangles = MeshTriangles(width, height, vertices_len);
-        }
-        mesh.triangles = MeshGenCache.triangles;
-        if (MeshGenCache.uv_width != noiseMap.GetLength(0) || MeshGenCache.uv_height != noiseMap.GetLength(0))
-        {
             MeshGenCache.uv_width = noiseMap.GetLength(0);
             MeshGenCache.uv_height = noiseMap.GetLength(1);
-            MeshGenCache.uv = MeshUVs(mesh.vertices, noiseMap.GetLength(0), noiseMap.GetLength(1));
+            MeshGenCache.mesh_increment = meshIncrement;
         }
         mesh.uv = MeshGenCache.uv;
         mesh.RecalculateNormals();
