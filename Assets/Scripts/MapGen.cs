@@ -45,7 +45,10 @@ public class MapGen : MonoBehaviour
     void Start()
     {
         if (noisePlane == null)
+        {
             noisePlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            noisePlane.name = "noisePlane";
+        }
         GenerateMap();
     }
 
@@ -175,7 +178,7 @@ public class MapGen : MonoBehaviour
         if (waterPlane == null)
         {
             waterPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            waterPlane.name = "waterPlane";
+            waterPlane.name = "WaterPlane";
         }
         if (waterPlane != null && showWaterPlane == false)
         {
