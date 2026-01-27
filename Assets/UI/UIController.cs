@@ -32,6 +32,7 @@ public class UIController : MonoBehaviour
     Button randomizePT_Button;
     Button kenPerlinPT_Button;
 
+    Toggle autoUpdateT;
     Button exportMeshButton;
     Button generateButton;
 
@@ -40,6 +41,10 @@ public class UIController : MonoBehaviour
     private void OnEnable()
     {
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+
+
+        autoUpdateT = root.Q<Toggle>("AutoUpdate_T");
+        autoUpdateT.value = false;
 
         //PermutationTableSize
         permTableSizeIF = root.Q<IntegerField>("PermTableSize_IF");
@@ -52,6 +57,7 @@ public class UIController : MonoBehaviour
             Validate();
             PerlinNoiseGenerator.RandomizePermutationTable(mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier);
             permTableSizeIF.value = PerlinNoiseGenerator.GetPermutationTableSize();
+            AutoUpdate();
         };
         //Ken Perlin Permutation Table
         kenPerlinPT_Button = root.Q<Button>("KenPerlinPT_B");
@@ -60,6 +66,7 @@ public class UIController : MonoBehaviour
             Validate();
             PerlinNoiseGenerator.RestoreKenPerlinPermutationTable();
             permTableSizeIF.value = PerlinNoiseGenerator.GetPermutationTableSize();
+            AutoUpdate();
         };
 
         //ImprovedNoiseConfig
@@ -75,6 +82,7 @@ public class UIController : MonoBehaviour
                 Validate();
                 sizeSI.value = sizeIF.value;
                 mapgen.noiseMapConfig.size = (uint)sizeIF.value;
+                AutoUpdate();
             }
         });
         sizeIF.RegisterCallback<FocusOutEvent>(x =>
@@ -82,6 +90,7 @@ public class UIController : MonoBehaviour
             Validate();
             sizeSI.value = sizeIF.value;
             mapgen.noiseMapConfig.size = (uint)sizeIF.value;
+            AutoUpdate();
         });
 
         sizeSI = root.Q<SliderInt>("Size_SI");
@@ -91,6 +100,7 @@ public class UIController : MonoBehaviour
             Validate();
             sizeIF.value = x.newValue;
             mapgen.noiseMapConfig.size = (uint)x.newValue;
+            AutoUpdate();
         });
 
 
@@ -104,6 +114,7 @@ public class UIController : MonoBehaviour
                 Validate();
                 scaleS.value = scaleFF.value;
                 mapgen.noiseMapConfig.scale = scaleFF.value;
+                AutoUpdate();
             }
         });
         scaleFF.RegisterCallback<FocusOutEvent>(x =>
@@ -111,6 +122,7 @@ public class UIController : MonoBehaviour
             Validate();
             scaleS.value = scaleFF.value;
             mapgen.noiseMapConfig.scale = scaleFF.value;
+            AutoUpdate();
         });
 
         scaleS = root.Q<Slider>("Scale_S");
@@ -120,6 +132,7 @@ public class UIController : MonoBehaviour
             Validate();
             scaleFF.value = x.newValue;
             mapgen.noiseMapConfig.scale = x.newValue;
+            AutoUpdate();
         });
 
         //OffsetBySize
@@ -129,6 +142,7 @@ public class UIController : MonoBehaviour
         {
             Validate();
             mapgen.noiseMapConfig.offsetBySize = x.newValue;
+            AutoUpdate();
         });
 
         //OffsetX
@@ -140,12 +154,14 @@ public class UIController : MonoBehaviour
             {
                 Validate();
                 mapgen.noiseMapConfig.offsetX = offsetXFF.value;
+                AutoUpdate();
             }
         });
         offsetXFF.RegisterCallback<FocusOutEvent>(x =>
         {
             Validate();
             mapgen.noiseMapConfig.offsetX = offsetXFF.value;
+            AutoUpdate();
         });
 
         //OffsetY
@@ -157,12 +173,14 @@ public class UIController : MonoBehaviour
             {
                 Validate();
                 mapgen.noiseMapConfig.offsetY = offsetYFF.value;
+                AutoUpdate();
             }
         });
         offsetYFF.RegisterCallback<FocusOutEvent>(x =>
         {
             Validate();
             mapgen.noiseMapConfig.offsetY = offsetYFF.value;
+            AutoUpdate();
         });
 
         //ImprovedNoiseConfigOffsetZ
@@ -174,12 +192,14 @@ public class UIController : MonoBehaviour
             {
                 Validate();
                 mapgen.noiseMapConfig.improvedNoiseZ = inOffsetZFF.value;
+                AutoUpdate();
             }
         });
         inOffsetZFF.RegisterCallback<FocusOutEvent>(x =>
         {
             Validate();
             mapgen.noiseMapConfig.improvedNoiseZ = inOffsetZFF.value;
+            AutoUpdate();
         });
 
         //ImprovedNoiseConfigMapSizeMultiplier
@@ -191,12 +211,14 @@ public class UIController : MonoBehaviour
             {
                 Validate();
                 mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier = (uint)inMapSizeMulIF.value;
+                AutoUpdate();
             }
         });
         inMapSizeMulIF.RegisterCallback<FocusOutEvent>(x =>
         {
             Validate();
             mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier = (uint)inMapSizeMulIF.value;
+            AutoUpdate();
         });
 
         //MeshHeight
@@ -208,12 +230,14 @@ public class UIController : MonoBehaviour
             {
                 Validate();
                 mapgen.meshHeight = meshHeightFF.value;
+                AutoUpdate();
             }
         });
         meshHeightFF.RegisterCallback<FocusOutEvent>(x =>
         {
             Validate();
             mapgen.meshHeight = meshHeightFF.value;
+            AutoUpdate();
         });
 
         //MeshLOD
@@ -225,12 +249,14 @@ public class UIController : MonoBehaviour
             {
                 Validate();
                 mapgen.meshLOD = (uint)lodIF.value;
+                AutoUpdate();
             }
         });
         lodIF.RegisterCallback<FocusOutEvent>(x =>
         {
             Validate();
             mapgen.meshLOD = (uint)lodIF.value;
+            AutoUpdate();
         });
 
         //NoiseSource
@@ -259,6 +285,7 @@ public class UIController : MonoBehaviour
                 improvedNoise_GB.style.display = DisplayStyle.None;
                 permTableSizeIF.style.display = DisplayStyle.None;
             }
+            AutoUpdate();
         });
         if (mapgen.noiseSource == NoiseSource.Unity)
         {
@@ -276,6 +303,7 @@ public class UIController : MonoBehaviour
         {
             Validate();
             mapgen.applyEaseFunction = x.newValue;
+            AutoUpdate();
         });
 
         //ApplyEaseFunction
@@ -285,6 +313,7 @@ public class UIController : MonoBehaviour
         {
             Validate();
             mapgen.useAvg = x.newValue;
+            AutoUpdate();
         });
 
         //CShader
@@ -299,6 +328,7 @@ public class UIController : MonoBehaviour
             {
                 mapgen.cshader = ColoringShader.TEXTURE;
             }
+            AutoUpdate();
         });
         if (mapgen.cshader == ColoringShader.HEIGHT)
         {
@@ -320,6 +350,7 @@ public class UIController : MonoBehaviour
                 Validate();
                 waterPlaneThresholdS.value = waterPlaneThresholdFF.value;
                 mapgen.waterPlaneThreshold = waterPlaneThresholdFF.value;
+                AutoUpdate();
             }
         });
         waterPlaneThresholdFF.RegisterCallback<FocusOutEvent>(x =>
@@ -327,6 +358,7 @@ public class UIController : MonoBehaviour
             Validate();
             waterPlaneThresholdS.value = waterPlaneThresholdFF.value;
             mapgen.waterPlaneThreshold = waterPlaneThresholdFF.value;
+            AutoUpdate();
         });
 
         waterPlaneThresholdS = root.Q<Slider>("WaterPlaneThreshold_S");
@@ -336,6 +368,7 @@ public class UIController : MonoBehaviour
             Validate();
             waterPlaneThresholdFF.value = x.newValue;
             mapgen.waterPlaneThreshold = x.newValue;
+            AutoUpdate();
         });
 
         //ShowWaterPlane
@@ -345,6 +378,7 @@ public class UIController : MonoBehaviour
         {
             Validate();
             mapgen.showWaterPlane = x.newValue;
+            AutoUpdate();
         });
 
         //ShowNoisePlane
@@ -354,6 +388,7 @@ public class UIController : MonoBehaviour
         {
             Validate();
             mapgen.showNoisePlane = x.newValue;
+            AutoUpdate();
         });
 
         //ExportMesh
@@ -391,6 +426,14 @@ public class UIController : MonoBehaviour
         if (waterPlaneThresholdS.value < 0.01) waterPlaneThresholdS.value = 0.01f;
         if (waterPlaneThresholdS.value > 1) waterPlaneThresholdS.value = 1f;
         permTableSizeIF.value = PerlinNoiseGenerator.GetPermutationTableSize();
+    }
+
+    void AutoUpdate()
+    {
+        if (autoUpdateT.value)
+        {
+            mapgen.GenerateMap();
+        }
     }
 
     void Update()
