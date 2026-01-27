@@ -46,6 +46,11 @@
             <ui:VisualElement style="height: 20px;" />
             <ui:DropdownField name="CShader_DF" label="CShader:" choices="Height,Texture" style="flex-direction: column; height: -47px;" />
             <ui:VisualElement style="height: 20px;" />
+            <ui:GroupBox name="WaterPlaneThreshold">
+                <ui:Label tabindex="-1" text="Water Plane Threshold" display-tooltip-when-elided="true" />
+                <ui:FloatField value="0.1" name="WaterPlaneThreshold_FF" style="width: 20%; flex-direction: column;" />
+                <ui:Slider value="0.1" high-value="1.0" name="WaterPlaneThreshold_S" low-value="0.01" style="flex-direction: column; align-items: flex-start; justify-content: space-between;" />
+            </ui:GroupBox>
             <ui:Toggle name="WaterPlane_T" label="Water Plane:" />
             <ui:Toggle name="NoisePlane_T" label="Noise Plane:" />
             <ui:VisualElement style="height: 20px;" />

@@ -70,6 +70,8 @@ public class MapGen : MonoBehaviour
         if (fBmParams.amplitude < 1) fBmParams.amplitude = 1;
         if (fBmParams.frequency < 1) fBmParams.frequency = 1;
         if (meshHeight < 0) meshHeight = 1;
+        if (waterPlaneThreshold < 0.01) waterPlaneThreshold = 0.01f;
+        if (waterPlaneThreshold > 1) waterPlaneThreshold = 1.0f;
         if (colors.Length < 1)
         {
             Array.Resize(ref colors, 1);

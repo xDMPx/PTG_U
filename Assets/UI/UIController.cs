@@ -23,8 +23,10 @@ public class UIController : MonoBehaviour
     Toggle useAvgT;
 
     DropdownField cShader_DF;
-    Toggle noisePlaneT;
+    FloatField waterPlaneThresholdFF;
+    Slider waterPlaneThresholdS;
     Toggle waterPlaneT;
+    Toggle noisePlaneT;
 
     Button randomizePT_Button;
     Button kenPerlinPT_Button;
@@ -298,6 +300,35 @@ public class UIController : MonoBehaviour
             cShader_DF.value = cShader_DF.choices[1];
         }
 
+
+        //WaterPlaneThreshold
+        waterPlaneThresholdFF = root.Q<FloatField>("WaterPlaneThreshold_FF");
+        waterPlaneThresholdFF.value = mapgen.waterPlaneThreshold;
+        waterPlaneThresholdFF.RegisterCallback<KeyDownEvent>(x =>
+        {
+            if (x.keyCode == KeyCode.Return)
+            {
+                Validate();
+                waterPlaneThresholdS.value = waterPlaneThresholdFF.value;
+                mapgen.waterPlaneThreshold = waterPlaneThresholdFF.value;
+            }
+        });
+        waterPlaneThresholdFF.RegisterCallback<FocusOutEvent>(x =>
+        {
+            Validate();
+            waterPlaneThresholdS.value = waterPlaneThresholdFF.value;
+            mapgen.waterPlaneThreshold = waterPlaneThresholdFF.value;
+        });
+
+        waterPlaneThresholdS = root.Q<Slider>("WaterPlaneThreshold_S");
+        waterPlaneThresholdS.value = mapgen.waterPlaneThreshold;
+        waterPlaneThresholdS.RegisterValueChangedCallback(x =>
+        {
+            Validate();
+            waterPlaneThresholdFF.value = x.newValue;
+            mapgen.waterPlaneThreshold = x.newValue;
+        });
+
         //ShowWaterPlane
         waterPlaneT = root.Q<Toggle>("WaterPlane_T");
         waterPlaneT.value = mapgen.showWaterPlane;
@@ -345,6 +376,8 @@ public class UIController : MonoBehaviour
         if (offsetYFF.value < 0) offsetYFF.value = 0;
         if (meshHeightFF.value < 0) meshHeightFF.value = 1;
         if (lodIF.value < 0) lodIF.value = 0;
+        if (waterPlaneThresholdS.value < 0.01) waterPlaneThresholdS.value = 0.01f;
+        if (waterPlaneThresholdS.value > 1) waterPlaneThresholdS.value = 1f;
     }
 
     void Update()
