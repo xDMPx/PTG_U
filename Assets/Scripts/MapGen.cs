@@ -60,6 +60,15 @@ public class MapGen : MonoBehaviour
             update = false;
             GenerateMap();
         }
+        transform.Rotate(new Vector3(0, Time.deltaTime, 0));
+        if (waterPlane != null)
+        {
+            waterPlane.transform.Rotate(new Vector3(0, Time.deltaTime, 0));
+        }
+        if (noisePlane != null)
+        {
+            noisePlane.transform.Rotate(new Vector3(0, Time.deltaTime, 0));
+        }
     }
 
     void OnValidate()
