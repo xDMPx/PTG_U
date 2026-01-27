@@ -44,11 +44,6 @@ public class MapGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (noisePlane == null)
-        {
-            noisePlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            noisePlane.name = "noisePlane";
-        }
         GenerateMap();
     }
 
@@ -94,8 +89,12 @@ public class MapGen : MonoBehaviour
 
     public void GenerateMap()
     {
-        if (noisePlane == null && showNoisePlane == true) Start();
-        if (noisePlane != null && showNoisePlane == false) DestroyImmediate(noisePlane);
+        if (noisePlane == null)
+        {
+            noisePlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            noisePlane.name = "noisePlane";
+        }
+        noisePlane.SetActive(showNoisePlane);
 
         float[,] noiseMap = NoiseMapUtilities.GeneratePerlinNoiseMap(
                 noiseSource,
@@ -187,15 +186,13 @@ public class MapGen : MonoBehaviour
     {
         if (waterPlane == null)
         {
-            waterPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            waterPlane.name = "WaterPlane";
+            if (waterPlane == null)
+            {
+                waterPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                waterPlane.name = "WaterPlane";
+            }
         }
-        if (waterPlane != null && showWaterPlane == false)
-        {
-            DestroyImmediate(waterPlane);
-            return;
-        }
-
+        waterPlane.SetActive(showWaterPlane);
         waterPlane.GetComponent<Renderer>().material = waterPlaneMaterial;
         waterPlane.transform.localScale = new Vector3(noiseMapConfig.size / 10.0f, 1, noiseMapConfig.size / 10.0f);
         waterPlane.transform.position = new Vector3(gameObject.transform.position.x,
