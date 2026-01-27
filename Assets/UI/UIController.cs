@@ -28,6 +28,7 @@ public class UIController : MonoBehaviour
     Toggle waterPlaneT;
     Toggle noisePlaneT;
 
+    IntegerField permTableSizeIF;
     Button randomizePT_Button;
     Button kenPerlinPT_Button;
 
@@ -40,12 +41,17 @@ public class UIController : MonoBehaviour
     {
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
 
+        //PermutationTableSize
+        permTableSizeIF = root.Q<IntegerField>("PermTableSize_IF");
+        permTableSizeIF.value = PerlinNoiseGenerator.GetPermutationTableSize();
+
         //Randomize Permutation Table
         randomizePT_Button = root.Q<Button>("RandomizePT_B");
         randomizePT_Button.clicked += () =>
         {
             Validate();
             PerlinNoiseGenerator.RandomizePermutationTable(mapgen.noiseMapConfig.improvedNoiseMapSizeMultiplier);
+            permTableSizeIF.value = PerlinNoiseGenerator.GetPermutationTableSize();
         };
         //Ken Perlin Permutation Table
         kenPerlinPT_Button = root.Q<Button>("KenPerlinPT_B");
@@ -53,6 +59,7 @@ public class UIController : MonoBehaviour
         {
             Validate();
             PerlinNoiseGenerator.RestoreKenPerlinPermutationTable();
+            permTableSizeIF.value = PerlinNoiseGenerator.GetPermutationTableSize();
         };
 
         //ImprovedNoiseConfig
@@ -243,12 +250,14 @@ public class UIController : MonoBehaviour
                 randomizePT_Button.style.display = DisplayStyle.Flex;
                 kenPerlinPT_Button.style.display = DisplayStyle.Flex;
                 improvedNoise_GB.style.display = DisplayStyle.Flex;
+                permTableSizeIF.style.display = DisplayStyle.Flex;
             }
             else
             {
                 randomizePT_Button.style.display = DisplayStyle.None;
                 kenPerlinPT_Button.style.display = DisplayStyle.None;
                 improvedNoise_GB.style.display = DisplayStyle.None;
+                permTableSizeIF.style.display = DisplayStyle.None;
             }
         });
         if (mapgen.noiseSource == NoiseSource.Unity)
@@ -381,6 +390,7 @@ public class UIController : MonoBehaviour
         if (lodIF.value < 0) lodIF.value = 0;
         if (waterPlaneThresholdS.value < 0.01) waterPlaneThresholdS.value = 0.01f;
         if (waterPlaneThresholdS.value > 1) waterPlaneThresholdS.value = 1f;
+        permTableSizeIF.value = PerlinNoiseGenerator.GetPermutationTableSize();
     }
 
     void Update()
