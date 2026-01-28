@@ -89,13 +89,6 @@ public class MapGen : MonoBehaviour
 
     public void GenerateMap()
     {
-        if (noisePlane == null)
-        {
-            noisePlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            noisePlane.name = "noisePlane";
-        }
-        noisePlane.SetActive(showNoisePlane);
-
         float[,] noiseMap = NoiseMapUtilities.GeneratePerlinNoiseMap(
                 noiseSource,
                 noiseMapConfig,
@@ -129,25 +122,7 @@ public class MapGen : MonoBehaviour
         if (cshader == ColoringShader.TEXTURE || showNoisePlane)
         {
             noiseTexture = NoiseMapUtilities.GenerateNoiseTexture(noiseMap);
-            if (showNoisePlane)
-            {
-                if (!Application.isPlaying)
-                {
-                    noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
-                    noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
-                }
-                else
-                {
-                    noisePlane.GetComponent<Renderer>().material = noisePlaneMaterial;
-                    noisePlane.GetComponent<Renderer>().material.mainTexture = noiseTexture;
-                }
-                int mapWidth = noiseMap.GetLength(0);
-                int mapHeight = noiseMap.GetLength(1);
-                noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
-                noisePlane.transform.position = gameObject.transform.position;
-            }
         }
-
         if (cshader == ColoringShader.TEXTURE)
         {
             if (!Application.isPlaying)
@@ -179,6 +154,7 @@ public class MapGen : MonoBehaviour
             }
         }
 
+        displayNoisePlane(noiseMap);
         displayWaterPlain();
     }
 
@@ -198,6 +174,35 @@ public class MapGen : MonoBehaviour
         waterPlane.transform.position = new Vector3(gameObject.transform.position.x,
                                           gameObject.transform.position.y + meshHeight * waterPlaneThreshold,
                                         gameObject.transform.position.z);
+    }
+
+    void displayNoisePlane(float[,] noiseMap)
+    {
+        if (noisePlane == null)
+        {
+            noisePlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            noisePlane.name = "noisePlane";
+        }
+        noisePlane.SetActive(showNoisePlane);
+
+        if (showNoisePlane)
+        {
+            if (!Application.isPlaying)
+            {
+                noisePlane.GetComponent<Renderer>().sharedMaterial = noisePlaneMaterial;
+                noisePlane.GetComponent<Renderer>().sharedMaterial.mainTexture = noiseTexture;
+            }
+            else
+            {
+                noisePlane.GetComponent<Renderer>().material = noisePlaneMaterial;
+                noisePlane.GetComponent<Renderer>().material.mainTexture = noiseTexture;
+            }
+            int mapWidth = noiseMap.GetLength(0);
+            int mapHeight = noiseMap.GetLength(1);
+            noisePlane.transform.localScale = new Vector3(mapWidth / 10.0f, 1, mapHeight / 10.0f);
+            noisePlane.transform.position = gameObject.transform.position;
+        }
+
     }
 
 }
